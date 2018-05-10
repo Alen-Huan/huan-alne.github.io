@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+	<script  type="text/javascript">
+	/*1、找基准（一般是以中间项为基准）
+
+2、遍历数组，小于基准的放在left，大于基准的放在right
+
+3、递归*/
+var arr=[1,10,3,6,2,-5,9,4,80,11];
+
+function kuaisu(arr){
+	if (arr.length<=1) {
+		return arr;
+	}
+	//确定基准
+	var mid=Math.floor(arr.length/2);//对取得的数字进行向下取整
+	var a=arr.splice(mid, 1)[0];//截取数组并返回被删除的数，返回的带有被删除元素的数组
+	var left=[];
+	var right=[];
+	for (var i = 0; i <arr.length; i++) {
+		if (arr[i]<a) {
+			 left.push(arr[i]);
+		}else{
+			 right.push(arr[i]);
+		}
+	}
+	return kuaisu(left).concat(a,kuaisu(right)); 
+} 
+document.write(kuaisu(arr));
+</script>
+</body>
+</html>

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+<script type="text/javascript">
+/////////////////方法1：每次都去walk走一遍找最短路径////////////////////
+
+var result1=[[1, 4, 9, 18],[9, -1, -1, -1],[14, -1, -1, -1],[22, -1, -1, -1]]; //默认两条边的最短路径只能是直走
+
+function way1(map, x, y) {
+
+    if (x == 0 || y == 0)
+        return result1[x][y];
+    return Math.min(way1(map, x - 1, y), way1(map, x, y - 1)) + map[x][y];
+}
+
+
+////////方法2：第一次走完所有，得到map最短路映射表，之后只需要查表////////
+
+var result2 = JSON.parse(JSON.stringify(result1)) //json实现数组拷贝
+
+function way2(map, x, y) {
+    return result2[x][y];
+}
+
+/**初始化结果集*/
+function walk(map, x, y) {
+    if (x == 0 || y == 0)
+        return result2[x][y];
+
+    //存入结果集，以便以后查询
+    var temp = Math.min(walk(map, x - 1, y), walk(map, x, y - 1)) + map[x][y];
+    result2[x][y] = temp;
+
+    return temp;
+}
+
+
+///////////////////////////////////////////调用/////////////////////////////
+
+var map = [[1, 3, 5, 9],[8, 1, 3, 4],[5, 0, 6, 1],[8, 8, 4, 0]];
+
+var begin=new Date().getTime();
+console.log("方法1：" + way1(map, 3, 3));
+console.log("用时："+(new Date().getTime()-begin));
+
+//初始化结果集	
+walk(map, 3, 3);
+begin=new Date().getTime();
+console.log("方法2：" + way2(map, 3, 3));
+console.log("用时："+(new Date().getTime()-begin));
+
+</script>
+</body>
+</html>

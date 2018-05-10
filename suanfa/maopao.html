@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>冒泡排序</title>
+</head>
+<body>
+<script type="text/javascript">
+	var a=[1,10,3,6,2,-5,9,4,80,11];
+	var temp=0;
+	// var changed=true;
+/*while(changed){
+	changed=false;
+	for (var i = 0; i <10; i++) {
+		if (a[i]>a[i+1]) {
+			  changed=true;
+				temp=a[i];
+				a[i]=a[i+1];
+				a[i+1]=temp
+			}
+	}
+}  */
+//冒泡排序：就是左右相邻比大小
+for (var n = 0; n <9; n++){
+	for (var i = 0; i <9; i++) {
+		if (a[i]>a[i+1]) {
+				temp=a[i];
+				a[i]=a[i+1];
+				a[i+1]=temp
+			}
+	}
+}
+document.write(a)
+</script>
+</body>
+</html>

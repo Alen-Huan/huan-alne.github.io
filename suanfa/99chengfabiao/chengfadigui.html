@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>99乘法表递归</title>
+</head>
+<body>
+	<script type="text/javascript">
+		function fn(i){
+			if (i==1) {
+				document.write(1 + "*"+1 + "=" + 1+'<br>'); 
+				
+			}else{
+				fn(i-1);
+				for (var j = 1; j <=i; j++) {
+					document.write(j+ "*"+i+ "=" +j*i+" ");
+				}
+				document.write("<br>");
+			}
+		}
+		fn(9);
+	</script>
+</body>
+</html>

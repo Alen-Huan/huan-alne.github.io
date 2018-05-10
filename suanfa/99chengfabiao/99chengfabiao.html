@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>99乘法表</title>
+</head>
+<body>
+	<script type="text/javascript" charset="utf-8">
+		//<tr> 元素定义表格行，<th> 元素定义表头，<td> 元素定义表格单元。
+		document.write("<table>");  
+		for (var i = 1; i <= 9; i++)  
+		{  
+			document.write("<tr>");  
+			for (var j = 1; j <= i; j++)  
+			{  
+				document.write("<th>"+j+ "*"+i+ "=" + j*i +"</th>");  
+			}  
+			document.write("</tr>");  
+		}  
+		document.write("</table>");  
+	</script>
+</body>
+</html>

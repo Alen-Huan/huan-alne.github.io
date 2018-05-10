@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>斐波拉契数列递归打印</title>
+</head>
+<body>
+	<script  type="text/javascript" charset="utf-8">
+ //递归方法
+	function fn(n){
+			if (n==1||n==2) {
+				return 1;
+			}
+			return fn(n-1)+fn(n-2);
+		}
+
+	var outString=''; 	
+	for (var i = 1; i<20; i++) {
+		outString+=fn(i)+" ";
+	}
+	document.write(outString);
+	</script>
+</body>
+</html>
