@@ -1,0 +1,242 @@
+*{
+	padding: 0;
+	margin: 0;
+
+}
+body{
+	background-color: #FAFAFA;
+}
+.body_head{
+	min-width: 100%;
+	clear: both;
+}
+/*头部导航栏*/
+.headBar{
+	height: 50px;
+	background-color: #000000;
+	position: absolute;
+	left: 0;
+	top: 0;
+	right: 0;
+	z-index: 999;
+	width: 100%
+}
+.headBar_left{
+	height: 50px;
+	float: left;
+}
+.headBar_logo{
+	width: 74px;
+	height: 24px;
+	padding:12px 28px 12px 28px;
+	float: left;/*每一个都要设置*/
+}
+.searchBox{
+	float: left;/*需要以此排列*/
+}
+/*搜素框的设置*/
+.search{
+	width: 180px;
+	height: 30px;
+	margin-top: 9px;
+	background: url(../img/search.png)no-repeat right center;
+	background-color: #3D3D3D;
+	border: 1px solid #3D3D3D;
+	font-size: 14px;
+	color: #A7A8A3;
+	padding-left: 10px;
+	padding-right: 6px;
+}
+.head_click{
+	float: left;
+	padding: 15px 25px 19px 25px;
+}
+.head_click a{
+	text-decoration-line: none;
+	color: #FFFDF4
+}
+.head_click a,span{
+	padding-right: 26px;
+}
+.headBar_right{
+	display: inline-block;/*变成一行*/
+	float: right;
+	color: white;
+	font-size: 10px;
+	padding: 18px 34px 19px 0px;
+}
+/*头部部分中间*/
+.head_mid,.img img{
+	min-width: 100%;/*设置最大宽度，能够让图片的宽度随浏览器的宽度进行变化*/
+	height:430px ;
+}
+.head_mid{
+	height: 430px;
+	width: 100%;
+	position: relative;/*相对定位*/
+}
+.logo{
+	position: absolute;/*绝对定位*/
+	width: 206px;
+	height: 96px;
+	top: 130px;
+	left: 50%;
+	margin: 0 0 0 -103px;
+	z-index: 10;
+}
+.text{
+	position: absolute;
+	width: 100%;
+	height: 40px;
+	line-height: 40px;
+	text-align: center;
+	top: 250px;
+	left: 0;
+}
+.text a{
+	background: url(../img/toumingbg.png);
+	text-decoration: none;
+	font-size: 16px;
+	color: #FFF;
+	padding: 0 25px;
+	border-radius: 4px;
+	display: inline-block;
+}
+/*头部尾部*/
+/*改*/
+.head_tall{
+	width: 100%;
+	min-width: 600px;
+	height: 88px;
+	text-align: center;
+	line-height: 88px;
+	background-color: #fff;
+}
+.head_tall a{
+	display: inline-block;
+	width: 200px;
+	height: 88px;
+	font-size: 22px;
+	vertical-align: middle;
+	color: #444;
+	text-decoration: none;
+	outline: none;
+}
+.sep{
+	display: inline-block;/**/
+	height: 24px;
+	width: 1px;
+	overflow: hidden;
+	background:#EAEAEA;
+	vertical-align: middle;
+}
+/*页面部分*/
+.body_page{
+	/*background-color: #FAFAFA;*/
+	width: 100%;
+}
+/*改*/
+.body_choice{
+	min-width: 600px;
+	height: 40px;
+	padding: 20px 0 10px;
+	text-align: center;
+	position: relative;
+}
+.body_choice a{
+	text-decoration: none;
+	font-size: 16px;
+	outline: none;
+	display: inline-block;
+	height: 40px;
+	width: 140px;
+	margin: 0 5px;
+	vertical-align: top;
+	line-height: 40px;
+	color: #555;
+}
+.abc{
+	border-radius: 5px;
+}
+.body_choice a:hover{
+	background-color: #928888;
+}
+.body_choice a:hover  .month{
+	background-color: #fff;
+	display: block;/*鼠标停留弹出div*/
+	z-index: 1111;
+	border:1px solid #FAFAFA;
+}
+/*弹出菜单*/
+.month{
+	display: none;
+	position: absolute;
+	width:680px; 
+	left: 25%;
+	border-radius: 5px;
+	z-index: 1111;
+	background-color: #fff;
+}
+.month ul{
+	padding-bottom: 10px;
+}
+.month ul li{
+	list-style: none;
+	float: left;
+	width: 136px;
+	height: 36px;
+	line-height: 36px;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	font-size: 13px;
+}
+
+/*改*/
+.body_imgs{
+  width: 1000px;
+  margin: 0 auto;
+}
+/*图片排列*/
+
+/*改*/
+.img1{
+	max-width: 480px;
+	height: 400px;
+	position: relative;
+	background: url(../img/white.png)no-repeat center bottom;
+	margin-bottom: 20px;
+	float: left;
+}
+h1{
+	height: 27px;
+	font-size: 18px;
+	font-weight: normal;
+	color: #666;
+	padding-bottom: 10px;
+}
+p{
+ 	font-size: 12px;
+ 	color: #666;
+}
+.people img{
+	width: 70px;
+	height: 70px;
+	border-radius: 50%;
+}
+.img_text{
+	text-align: center;
+	margin-top: 30px;
+	margin-bottom: 10px;
+}
+.people{
+	position: absolute;
+	left: 40%;
+	top: 250px;
+	text-align:center;
+	vertical-align: middle;
+}
+/*改*/
+.img22{
+	display: inline;
+	float: right;
+}
