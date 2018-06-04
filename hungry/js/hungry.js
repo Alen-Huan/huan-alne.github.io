@@ -36,7 +36,7 @@ function slideImg() {
 function startAutoPlay(){
     timer = setInterval(function(){
         index++;
-        if(index>3){
+        if(index>7){
             index = 0;
         }
         changeImg();
