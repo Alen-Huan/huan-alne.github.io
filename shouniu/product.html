@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>商品列表</title>
+    <link rel="stylesheet" href="css/product.css">
+    <link rel="stylesheet" href="css/lunbotu.css">
+    <link rel="stylesheet" href="css/common.css">
+    <script src="js/jquery-1.7.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/md5.js"></script>
+    <script src="unslider-150203225543/unslider.min.js"></script>
+    <script src="js/product.js"></script>
+</head>
+
+<body>
+    <div class="head">
+        <div class="icon-box">
+            <a onclick="toReturn()" class="product-circle">
+                <i class="iconfont">&#xe64e;</i>
+            </a>
+            <div class="product-info-title">
+                <h3>商品详情</h3>
+            </div>
+            <a onclick="javascript:window.location.href='shopCar.html?';" class="product-circle" style="margin-right: 15px">
+                <i class="iconfont">&#xe622;</i>
+            </a>
+            <a class="product-circle" onclick="showMenu()">
+                <i class="iconfont">&#xe60b;</i>
+                <div id="pop-up">
+                    <i class="ion-arrow-up-b triangle"></i>
+                    <ul>
+                        <li>
+                            <i class="iconfont">&#xe618;</i>
+                            <span>消息</span>
+                        </li>
+                        <li>
+                            <i class="iconfont">&#xe628;</i>
+                            <span>云控首页</span>
+                        </li>
+                        <li onclick="shield()">
+                            <i class="iconfont">&#xe61e;</i>
+                            <span>分享</span>
+                        </li>
+                        <li onclick="toProduct()">
+                            <i class="iconfont">&#xe60f;</i>
+                            <span>收藏夹</span>
+                        </li>
+                    </ul>
+                </div>
+            </a>
+        </div>
+    </div>
+    <div class="banner" id="b04">
+        <ul>
+        </ul>
+        <a href="javascript:void(0);" class="unslider-arrow04 prev">
+        </a>
+        <a href="javascript:void(0);" class="unslider-arrow04 next">
+        </a>
+    </div>
+    <div class="product-txt">
+        <p></p>
+        <div class="price">
+            <p>
+            </p>
+            <div class="txt-right">
+                <div onclick="shield()">
+                    <p>
+                        <i class="iconfont">&#xe61e;</i>
+                    </p>
+                    <p>分享</p>
+                </div>
+                <!-- 遮罩 -->
+                <div id="mask">
+                </div>
+                <div id="log_window">
+                    <ul>
+                        <li id="qqkongjian">
+                            <a class="chat-qq">
+                                <i class="iconfont" style="color: #6ac8ef;">&#xe60c;</i>
+                                <span> QQ空间 </span>
+                            </a>
+                        </li>
+                        <li id="douban">
+                            <a class="chat-qq">
+                                <i class="iconfont" style="color: #7df93f;">&#xe662;</i>
+                                <span>豆瓣</span>
+                            </a>
+                        </li>
+                        <li id="xinlang">
+                            <a class="chat-qq">
+                                <i class="iconfont" style="color: #f7c54f;">&#xe65f;</i>
+                                <span>新浪微博</span>
+                            </a>
+                        </li>
+                        <li id="baidutieba">
+                            <a class="chat-qq">
+                                <i class="iconfont" style="color: #1d71f5;">&#xe65e;</i>
+                                <span>百度贴吧</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="chat-qq" style="color: #646c7a;">
+                                <i class="iconfont">&#xe600;</i>
+                                <span>腾讯微博</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="chat-qq" style="color: #646c7a;">
+                                <i class="iconfont">&#xe601;</i>
+                                <span>FaceBook</span>
+                            </a>
+                        </li>
+                    </ul>
+                    <a href="javascript:cancel_shield()" class="cancel">取消</a>
+                </div>
+            </div>
+        </div>
+        <div class="send-price">
+            <p>快递：</p>
+            <p></p>
+        </div>
+    </div>
+    <!-- 评价 -->
+    <div class="evaluation-box">
+        <div class="evaluation">评价</div>
+        <div class="user-evaluation">
+            <p>用户评价
+                <span>(3)</span>
+            </p>
+            <div class="user-info">
+                <img src="img/photo.jpg">
+                <span>是谁</span>
+            </div>
+            <span>可以</span>
+            <p>2018-01-12 18:13:58</p>
+        </div>
+        <a href="#">查看全部</a>
+    </div>
+    <!-- 产品详情 -->
+    <div class="product-info">
+        <p>产品详情</p>
+        <ul class="product-imgsinfo-imgs">
+        </ul>
+        <p>产品推荐</p>
+        <div class="content">
+            <ul class="product-list">
+            </ul>
+        </div>
+        <p>没有了</p>
+    </div>
+    <div class="foot">
+        <a onclick="collectProduct()" class="collect">
+            <i class="iconfont" style="font-size: 20px;margin-top: 5px;color: #888181;">&#xe63c;</i>
+            <span style=" line-height: 20px;">未收藏</span>
+        </a>
+        <div class="addCar">
+            <a>加入购物车</a>
+            <div id="mask2"></div>
+            <!-- 遮罩弹出 -->
+            <div id="addCar-pop">
+                <div id="add-shopCar">
+                    <div class="shop-product">
+                        <img src="">
+                    </div>
+                    <div class="addCar-price">
+                        <span>￥</span>
+                        <span>已选:</span>
+                    </div>
+                    <a class="addCar-close">
+                        <img src="img/quxiaoxiadan.png">
+                    </a>
+                    <div class="addCar-color">
+                        <p>选择分类</p>
+                        <div class="type-color" id="addCar">
+                            <span>黑</span>
+                            <span>白</span>
+                            <span>蓝</span>
+                            <span>绿</span>
+                        </div>
+                    </div>
+                    <div class="addCar-num">
+                        <p>购买数量</p>
+                    </div>
+                    <div class="addCar-choice">
+                        <img src="img/jian.png">
+                        <input type="text" value="1" class="num">
+                        <img src="img/jia.png">
+                    </div>
+                    <a class="sure">确定</a>
+                </div>
+            </div>
+        </div>
+        <div class="buy-now">
+            <a> 立即购买 </a>
+        </div>
+    </div>
+    <div class="noProduct">
+        <span>添加成功</span>
+    </div>
+</body>
+<script>
+    /*---------------------------------------请求后台数据，商品详情页的所有数据模块-------------------------*/
+    var id = getParamsByKey("id"); //接受传过来的商品id，访问接口获取商品详情页
+    //所有的全局变量
+    var dataJSONs = ""; //访问接口成功，获得商品详情页的数据
+    var dataImg = ""; //制作轮播图的大图
+    var dataTitle = ""; //商品标题
+    var dataPrice = 0; //商品单价
+    var dataColor = ""; //商品种类
+    var dataKdprice = 0; //商品运费
+    var dataId = 0; //商品id
+    var dataImgs = []; //商品详情图片数组
+    var dataSimg = '';//商品小图片
+    var _jSessionId = myLocalStorage.get("jSessionId");//判断用户是否登录
+    //jq的立即执行函数
+    $(function () {
+        // 请求商品数据
+        $.ajax({
+            type: "GET",
+            url: "http://" + ip + ":" + port + "/" + app + "/product.do",
+            data: {
+                method: "getMallproductInfo",
+                id: id
+            },
+            dataType: "json",
+            success: function (dataJSON) {
+                if (dataJSON.statusCode == 200) {
+                    dataJSONs = dataJSON.data.mallproduct;
+                    console.log(dataJSONs);
+                    dataImg = dataJSONs.mpImg;
+                    dataTitle = dataJSONs.mpTitle;
+                    dataPrice = dataJSONs.mpPrice;
+                    dataColor = dataJSONs.mpColor;
+                    dataSimg = dataJSONs.mpSimg;
+                    dataKdprice = dataJSONs.mpKdprice;
+                    dataId = dataJSONs.mpId;
+                    typePrice = dataJSONs.mpAllprice;
+                    dataImgs = dataJSONs.mpImgs;
+                    showProductData();
+                } else {
+                    otherStates(dataJSON.statusCode);
+                }
+            },
+            error: function (dataJSON) {
+                $(".banner").html("");
+                $(".banner").html("没有更多的数据了！！");
+            }
+        });
+        // 所有推荐商品列表
+        $.ajax({
+            type: "GET",
+            url: "http://" + ip + ":" + port + "/" + app + "/product.do",
+            data: {
+                method: "getMallproductList",
+                page: 1,
+                type: 0
+            },
+            dataType: "json",
+            success: function (dataJSON) {
+                var dataJSONs = dataJSON.data.mallproductList;
+                for (var i in dataJSONs) {
+                    $(".product-list").append(
+                        "<li onclick=\"javascript:window.location.href='product.html?id=" +
+                        dataJSONs[i].mpId +
+                        "&producttag=producttag';\">" +
+                        '<a class="img-product">' +
+                        '<img src="' +
+                        dataJSONs[i].mpSimg +
+                        '">' +
+                        "</a>" +
+                        '<div class="img-txt" >' +
+                        "<p>" +
+                        dataJSONs[i].mpTitle +
+                        "</p>" +
+                        "<p>" +
+                        dataJSONs[i].mpPrice +
+                        "</p>" +
+                        "<span>" +
+                        dataJSONs[i].mpOldprice +
+                        "</span>" +
+                        "</div>" +
+                        "</li>"
+                    );
+                }
+            }
+        });
+    });
+    /*---------------------------------------绑定商品详情页数据模块---------------------------------------*/
+    //绑定页面数据以及生成轮播图
+    function showProductData() {
+        // 商品的标题、价格等等
+        $(".product-txt")
+            .children("p")
+            .text(dataJSONs.mpTitle);
+        $(".price>p").text(dataJSONs.mpPrice);
+        $(".price>p").append("<span>原价" + dataJSONs.mpOldprice + "</span>");
+        $(".send-price>p:first-child").text(
+            "快递：" + dataJSONs.mpKdprice + "元"
+        );
+        $(".send-price>p:last-child").text(dataJSONs.mpAddress);
+        //start:
+        //生成轮播图li标签
+        for (var i in dataImg) {
+            $(".banner>ul").append(
+                '<li style="width:25%;">' +
+                '<img src="' +
+                dataImg[i] +
+                '" alt=" " width="100%" height="300">' +
+                "</li>"
+            );
+        }
+        //控制轮播图动画
+        var unslider04 = $("#b04").unslider({
+            dots: true
+        }),
+            data04 = unslider04.data("unslider");
+        $(".unslider-arrow04").click(function () {
+            var fn = this.className.split(" ")[1];
+            data04[fn]();
+        });
+        //end;
+        //生成商品详情图片
+        for (var i in dataImgs) {
+            $(".product-imgsinfo-imgs").append(
+                "<li>" +
+                '<img src="' +
+                dataImgs[i] +
+                '" alt=" " style="width:100%; vertical-align:bottom;">' +
+                "</li>"
+            );
+        }
+    }
+    /*---------------------------------------页面小功能模块-----------------------------------------------*/
+    //控制屏幕滑到一定距离头部导航的颜背景色改变，显示出字
+    $(function () {
+        $(window).scroll(function () {
+            if ($(window).scrollTop() >= 500) {
+                $(".head").addClass("menu_bg");
+                $(".product-info-title").css("visibility", "visible");
+            } else {
+                var current = $(".head");
+                current.removeClass("menu_bg");
+                current = $(this);
+                $(".product-info-title").css("visibility", "hidden");
+            }
+        });
+    });
+    /*---------------------------------------分享模块--------------------------------------------------*/
+    // 点击分享到第三方平台
+    $('#log_window>ul>#qqkongjian').children('a').attr('href',
+        'javascript:getSharedUrl("qqkongjian","' + dataJSONs.mpBimg + '","' + dataJSONs
+            .mpTitle + '");');
+    $('#log_window>ul>#douban').children('a').attr('href',
+        'javascript:getSharedUrl("douban","' + dataJSONs.mpBimg + '","' + dataJSONs
+            .mpTitle + '");');
+    $('#log_window>ul>#xinlang').children('a').attr('href',
+        'javascript:getSharedUrl("xinlang","' + dataJSONs.mpBimg + '","' + dataJSONs
+            .mpTitle + '");');
+    $('#log_window>ul>#baidutieba').children('a').attr('href',
+        'javascript:getSharedUrl("baidutieba","' + dataJSONs.mpBimg + '","' + dataJSONs
+            .mpTitle + '");');
+    /*---------------------------------------------------收藏商品模块-------------------------------------*/
+    //到收藏夹
+    function toProduct() {
+        var _jSessionId = myLocalStorage.get("jSessionId"); //判断用户是否登录
+        if (_jSessionId == null) {
+            window.location.href = "login.html?producttag=producttag";
+        } else {
+            window.location.href = "collection.html";
+        }
+    }
+    //进入商品详情页进行判断是否收藏该商品(用户已登录的情况下做这些操作)
+    $(function () {
+        if (_jSessionId == null) {
+            return;
+        } else {
+            $.ajax({
+                type: "GET",
+                url: "http://" + ip + ":" + port + "/" + app + "/collection.do",
+                data: {
+                    method: "getCollectionList",
+                    page: 1,
+                    jSessionId: getJSessionId()
+                },
+                dataType: "json",
+                success: function (dataJSON) {
+                    if (dataJSON.statusCode == 200) {
+                        console.log(dataJSON.data.collectionList);
+                        var collectedArr = dataJSON.data.collectionList;
+                        for (var i = 0; i < collectedArr.length; i++) {
+                            if (collectedArr[i].coMpid == dataId) {
+                                $(".collect")
+                                    .children("i")
+                                    .addClass("collected");
+                                $(".collect")
+                                    .children("span")
+                                    .text("已收藏");
+                            }
+                        }
+                    } else {
+                        otherStates(dataJSON.statusCode);
+                    }
+                },
+                error: function (dataJSON) {
+                    alert("对不起，网络出差啦");
+                }
+            });
+        }
+    });
+    // 点击收藏按钮时触发的方法
+    function collectProduct() {
+        var isCellected = $('.collect').children('span').text();;
+        if (_jSessionId == null) {
+            window.location.href = "login.html?id=" + id + "&producttag=producttag";
+        } else {
+            if (isCellected == '未收藏') {
+                $.ajax({
+                    type: "POST",
+                    url: "http://" + ip + ":" + port + "/" + app + "/collection.do",
+                    data: {
+                        method: 'collect',
+                        mallproductId: dataId,
+                        jSessionId: getJSessionId()
+                    },
+                    dataType: "json",
+                    success: function (dataJSON) {
+                        if (dataJSON.statusCode == 200) {
+                            $(".noProduct").children('span').text(dataJSON.message);
+                            $(".noProduct").show();
+                            // div延时消失
+                            $('.noProduct').delay(500).hide(0);
+                            $('.collect').children('i').addClass("collected");
+                            $('.collect').children('span').text("已收藏");
+                        } else {
+                            otherStates(dataJSON.statusCode);
+                        }
+                    },
+                    error: function (dataJSON) {
+                        alert("对不起，网络出差啦！");
+                    }
+                });
+            } else if (isCellected == '已收藏') {
+                $.ajax({
+                    type: "POST",
+                    url: "http://" + ip + ":" + port + "/" + app + "/collection.do",
+                    data: {
+                        method: 'cannelCollection',
+                        mallproductId: dataId,
+                        jSessionId: getJSessionId()
+                    },
+                    dataType: "json",
+                    success: function (dataJSON) {
+                        if (dataJSON.statusCode == 200) {
+                            $(".noProduct").children('span').text(dataJSON.message);
+                            $(".noProduct").show();
+                            // div延时消失
+                            $('.noProduct').delay(500).hide(0);
+                            $('.collect').children('i').removeClass("collected");
+                            $('.collect').children('span').text("未收藏");
+                        } else {
+                            otherStates(dataJSON.statusCode);
+                        }
+                    },
+                    error: function (dataJSON) {
+                        alert("对不起，网络出差啦！");
+                    }
+                });
+            }
+        }
+    }
+    /*----------------------------加入购物车、立即购买模块-------------------------------------------------*/
+    //全局变量
+    var isaddCar = true;//确定是点击了确定按钮还是立即购买按钮
+    var dataColors = [];//分类数组
+    var typePrices = [];//根据分类的价格
+    var singPrcie = 0;//默认第一个商品价格
+    var shopCarProduct = {};//未登录时需存进本地的商品数据
+    var productType = '';//加入购物车或者立即购买商品的分类
+    var allPrice = 0;//总价
+    var allNum = 1;//总数量（没有进行数量编辑时，默认为1）
+    var currentDate = format(new Date(), "yyyy-MM-dd HH:mm:ss"); //当前时间
+    // 选择商品下单详情页
+    jQuery.fn.addShopcar = function () {
+        var s = document.getElementById("mask2");
+        s.style.display = "block";
+
+        var l = document.getElementById("addCar-pop");
+        l.style.display = "block";
+    }
+    jQuery.fn.closeShopcar = function () {
+        var s = document.getElementById("mask2");
+        s.style.display = "none";
+
+        var l = document.getElementById("addCar-pop");
+        l.style.display = "none";
+    }
+    // 加入购物车
+    $(".addCar").children('a').click(function () {
+        isaddCar = true;//点击加入购物车，值为true
+        showChoiceOrder();
+    });
+    $(".buy-now").children('a').click(function () {
+        isaddCar = false;
+        showChoiceOrder();
+    });
+    // 关闭下单页面
+    $(".addCar-close").click(function () {
+        $(".addCar-close").closeShopcar();
+    });
+    //购物车下单详情页面
+    function showChoiceOrder() {
+        $(".addCar").children('a').addShopcar();
+        $(".shop-product").children('img').attr('src', dataSimg);
+        dataColors = dataColor.split(",");
+        typePrices = typePrice.split(",");
+        $('.type-color').html('');
+        for (var i in dataColors) {
+            $('#addCar').append('<span price=' + typePrices[i] + '>' + dataColors[i] +
+                '</span>');
+        }
+        // 默认选择第一个分类
+        $('#addCar').children("span").first().addClass("clickBg");
+        var first_span = $('#addCar').children("span").first().text();
+        $(".addCar-price").children('span').last().text(
+            "已选：" + first_span);
+        $(".addCar-price").children('span').first().text(
+            "￥:" + typePrices[0]);
+        $('.num').attr('value', '1');//数量默认为1
+        //存入本地数据/*-----------------*/
+        singPrcie = typePrices[0];//默认第一个商品类型被选择，价格也被选中
+        allPrice = singPrcie;//用户未进行选择时，总价就为第一个商品的价格
+        productType = first_span;//默认分类为第一个分类
+        //jq的事件委托写法(优化减少dom操作)为每一个span添加点击事件
+        $(function () {
+            $("#addCar").on("click", "span", function (event) {
+                var target = $(event.target);//事件的目标源 span
+                $('.num').attr('value', '1');//进行选择时，数量默认1
+                $("#addCar").children('span').removeClass('clickBg');//移除样式
+                $(".addCar-price").children('span').last().text(
+                    "");//清空文字
+                //进行重新赋值
+                $(".addCar-price").children('span').last().text(
+                    "已选：" + target.text());
+                $(".addCar-price").children('span').first().text(
+                    "￥:" + target.attr("price"));
+                target.attr('class', 'clickBg');//给选中的设置样式
+                //存入本地数据/*-----------------*/
+                singPrcie = target.attr("price");
+                allPrice = singPrcie;
+                productType = target.text();
+            })
+        });
+    }
+    // 绑定数量编辑的+-
+    // 加法
+    $('.addCar-choice').children('img').last().click(function () {
+        var n = $(this).prev().val();
+        var num = parseInt(n) + 1;
+        $(this).prev().val(num);
+        // 总数量
+        allNum = num;
+        //单价
+        // 总价
+        allPrice = (num * singPrcie).toFixed(2);
+        $(".addCar-price").children('span').first().text("￥：" + allPrice);
+    });
+    // 减法
+    $('.addCar-choice').children('img').first().click(function () {
+        var n = $(this).next().val();
+        var num = parseInt(n) - 1;
+        if (num == 0) {
+            return;
+        }
+        $(this).next().val(num);
+        // 总数量
+        allNum = num;
+        // 总价
+        allPrice = (num * singPrcie).toFixed(2);
+        $(".addCar-price").children('span').first().text("");
+        $(".addCar-price").children('span').first().text("￥：" + allPrice);
+    });
+    // （加入购物车、立即购买）的确定按钮
+    $(".sure").click(function () {
+        // 根据不同的isaddCar值来进行响应，isaddCar是一个全局变量
+        if (isaddCar) {
+            shopCarProduct = {
+                "shPid": 0,
+                "shMpid": dataId,
+                "shColor": productType,
+                'shPrice': parseFloat(allPrice),
+                "shKdprice": dataKdprice,
+                "shNum": allNum,
+                "shTitle": dataTitle,
+                "shSimg": dataSimg,
+                "shDate": currentDate
+            };
+            //弹出提示框
+            $("#addCar-pop").hide();
+            $("#mask2").hide();
+            $(".noProduct").show();
+            // div延时消失
+            $('.noProduct').delay(500).hide(0);
+            //判断是否登录
+            if (_jSessionId == null) {
+                //存入本地
+                shopCar.set(shopCarProduct);
+            } else {
+                //同步后台
+                addShopCarProduct();
+            }
+        } else {
+            if (_jSessionId == null) {
+                window.location.href = "login.html?id=" + id + "&producttag= producttag";
+            } else {
+                // 选择的商品对象（先存入LocalStorage然后在订单页面取出来）
+                var buyNowProduct = {
+                    "title": dataTitle,
+                    "productImg": dataSimg,
+                    "Color": productType,
+                    "singprice": dataPrice,
+                    "Num": allNum,
+                    "Kdprice": dataKdprice,
+                    "Price": Number(allPrice),
+                    "Mpid": dataId,
+                };
+                var buyNowProductArr = [buyNowProduct];
+                //数据存入本地
+                myLocalStorage.set("buyNowGoods", buyNowProductArr);
+                //跳转到订单页面
+                window.location.href = "order.html?buynowtag=buynowtag";
+            }
+        }
+    });
+    /*---------------------------------------已登录时，加入购物车为更新到后台数据---------------------------*/
+    //同步购物车数据到后台（用户已登录）
+    function addShopCarProduct() {
+        var shopCarProductArr = [shopCarProduct];
+        console.log(JSON.stringify(shopCarProductArr));
+        $.ajax({
+            type: "POST",
+            url: "http://" + ip + ":" + port + "/" + app + "/shopcar.do",
+            data: {
+                method: 'insert',
+                data: JSON.stringify(shopCarProductArr),
+                jSessionId: getJSessionId()
+            },
+            dataType: "json",
+            success: function (dataJSON) {
+                if (dataJSON.statusCode == 200) {
+                    console.log(dataJSON.message);
+                } else {
+                    otherStates(dataJSON.statusCode);
+                }
+            },
+            error: function (dataJSON) {
+                alert("对不起，网络出差啦！");
+            }
+        });
+    }
+</script>
+
+</html>

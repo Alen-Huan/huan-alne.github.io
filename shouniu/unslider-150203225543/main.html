@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>轮播图</title>
+    <link rel="stylesheet" href="main.css">
+    <!-- <style>
+        * {
+            padding: 0;
+            margin: 0;
+            list-style: none;
+            border: 0;
+        }
+
+        .all {
+            position: relative;
+            width: 640px;
+            height: 240px;
+            padding: 7px;
+            border: 1px solid #ccc;
+        }
+
+        .screen {
+            width: 640px;
+            height: 240px;
+            margin: 10px auto;
+            position: relative;
+            /* overflow: hidden; */
+        }
+
+        .screen ul {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 1920px;
+        }
+
+        .screen li {
+            width: 640px;
+            height: 240px;
+            float: left;
+            overflow: hidden;
+        }
+
+
+        ul li img {
+            float: left;
+        }
+
+        #left {
+            background-color: rgba(0, 0, 0, .3);
+            margin: 10px auto;
+            position: absolute;
+            top: 240px;
+            left: 30%;
+            text-align: center;
+            width: 50px;
+            line-height: 50px;
+            height: 50px;
+            font-size: 20px;
+            font-weight: 800;
+            color: #fff;
+        }
+
+        #right {
+            background-color: rgba(0, 0, 0, .5);
+            margin: 10px auto;
+            position: absolute;
+            top: 240px;
+            right: 27%;
+            text-align: center;
+            width: 50px;
+            line-height: 50px;
+            height: 50px;
+            font-size: 20px;
+            font-weight: 800;
+            color: #fff;
+        }
+
+        ol {
+            list-style: none;
+            height: 40px;
+            position: absolute;
+            top: 436px;
+            right: 43%;
+        }
+
+        ol li {
+
+            float: left;
+            background-color: #ffa500;
+            text-align: center;
+            float: left;
+            width: 30px;
+            height: 30px;
+            border: 1px solid #f00;
+            margin-left: 10px;
+        }
+    </style> -->
+</head>
+
+<body>
+    <div class="all" id="box">
+        <div class="screen">
+            <!-- 图片 -->
+            <ul>
+                <li>
+                    <img src="01.jpg" alt="" width="640" height="480">
+                </li>
+
+                <li>
+                    <img src="02.jpg" alt="" width="640" height="480">
+                </li>
+
+                <li>
+                    <img src="03.jpg" alt="" width="640" height="480">
+                </li>
+            </ul>
+            <!-- 序号 -->
+            <ol>
+            </ol>
+        </div>
+        <div id="arr">
+            <span id="left">&lt;</span>
+            <span id="right">&gt;</span>
+        </div>
+    </div>
+    <script src="animate.js"></script>
+    <script src="common.js"></script>
+    <script src="main.js"></script>
+</body>
+
+</html>

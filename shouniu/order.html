@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>确认订单</title>
+    <link rel="stylesheet" href="css/order.css" />
+    <link rel="stylesheet" href="css/common.css" />
+    <script src="js/jquery-1.7.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/md5.js"></script>
+</head>
+
+<body>
+    <!-- S:头部 -->
+    <div class="head">
+        <a class="head-left" onclick="toReturn()">
+            <i class="fa fa-angle-left left-return"></i>
+        </a>
+        <div class="head-title">
+            <h3>确认订单</h3>
+        </div>
+    </div>
+    <!-- E:头部 -->
+    <!-- 收货地址 -->
+    <a href="javascript:void(0)" class="address">
+        <img src="img/dizhidingwei.png" />
+        <div class="consumers">
+            <span>收货人：欢欢</span>
+            <span>联系电话：15708182072</span>
+            <p>地址：四川省成都市双流县双流路双流街66号双流666俱乐部</p>
+        </div>
+        <i class="iconfont">&#xe62e;</i>
+    </a>
+    <!-- 收货地址 -->
+    <div>
+        <img src="img/order_line.png" style="height:5px;width: 100%;" />
+    </div>
+    <!-- 购买的产品 -->
+    <div class="consumers-product-box">
+        <div class="consumers-product">
+            <div class="consumers-product-head">
+                <img src="img/muying.png" />
+                <div class="consumers-product-title">
+                    <p></p>
+                    <span>分类：白</span>
+                    <sapn class="product-price">￥13.80</sapn>
+                </div>
+            </div>
+            <div class="consumers-product-num">
+                <span>购买数量</span>
+                <div class="num-img">
+                    <img src="img/jian.png" onclick="reduce(this)" />
+                    <input type="text" value="" />
+                    <img src="img/jia.png" onclick="addNum(this)" />
+                </div>
+            </div>
+            <div class="consumers-product-send">
+                <span>配送方式</span>
+                <span>快递：0.00元</span>
+            </div>
+            <!-- 备注 -->
+            <div class="consumers-product-note">
+                <p> 买家备注:</p>
+                <textarea placeholder="请输入备注信息"></textarea>
+            </div>
+        </div>
+    </div>
+
+    <!-- 购买的产品 -->
+    <!-- 计数 -->
+    <div class="consumers-product-count">
+        <p>共
+            <span>1</span>件商品
+        </p>
+        小计：
+        <span style="color: red;">￥
+            <span>13.80</span>
+        </span>
+    </div>
+    <!-- 支付 -->
+    <div class="product-pay">
+        <div class="product-pay-all">
+            <i class="iconfont">&#xe62a;</i>
+            <sapn>微信支付</sapn>
+            <input type="radio" id="weixin" name="pay" checked/>
+            <label for="weixin"></label>
+        </div>
+
+        <div class="product-pay-all">
+            <i class="iconfont" style="color: blue;">&#xe665;</i>
+            <span>支付宝支付</span>
+            <input type="radio" id="zhifubao" name="pay" />
+            <label for="zhifubao"></label>
+        </div>
+        <div class="product-pay-all on">
+            <i class="fa fa-wechat "></i>
+            <sapn>首牛钱包支付</sapn>
+            <input type="radio" id="shouniu" name="pay" />
+            <label for="shouniu"></label>
+        </div>
+    </div>
+    <div class="foot">
+        <span>
+            合计：￥
+            <span>13.80</span>
+        </span>
+        <a onclick="submitOrders()">提交订单</a>
+    </div>
+    <div id="mask">
+    </div>
+    <div id="pay_box">
+        <!-- 支付密码 -->
+        <div class="pay-money">
+            <div class="pwd-box">
+                <i class="iconfont" onclick="closePay()">&#xe602;</i>
+                <span>请输入交易密码</span>
+            </div>
+            <div class="money">
+                <span>金额</span>
+                <p>￥
+                    <span>248.10</span>
+                </p>
+            </div>
+            <div class="pay-password">
+                <input type="password" maxlength="1" class="pwd">
+                <input type="password" maxlength="1" class="pwd">
+                <input type="password" maxlength="1" class="pwd">
+                <input type="password" maxlength="1" class="pwd">
+                <input type="password" maxlength="1" class="pwd">
+                <input type="password" maxlength="1" class="pwd">
+            </div>
+        </div>
+        <!-- 表格 -->
+        <table class="tables">
+            <thead>
+                <tr class="trs">
+                    <td class="tds" colspan="3" style="
+                        color: #b8b5b5;
+                    ">
+                        <i class="iconfont" onclick="closePay()"></i>
+                    </td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="trs">
+                    <td class="tds number">1</td>
+                    <td class="tds number">2</td>
+                    <td class="tds number">3</td>
+                </tr>
+                <tr class="trs">
+                    <td class="tds number">4</td>
+                    <td class="tds number">5</td>
+                    <td class="tds number">6</td>
+                </tr>
+                <tr class="trs">
+                    <td class="tds number">7</td>
+                    <td class="tds number">8</td>
+                    <td class="tds number">9</td>
+                </tr>
+                <tr class="trs">
+                    <td class="tds" style="background-color: #cecccc;"></td>
+                    <td class="tds number">0</td>
+                    <td class="tds" style="background-color: #cecccc;" onclick="deleteNum()">
+                        <i class="iconfont" style="font-size: 28px;color:#6e6a6a;">&#xe668;</i>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+<script>
+    /*------------------------------------------展示数据模块------------------*/
+    //全局变量
+    var submitOrdersArr = [];//需提交订单的商品
+    var buynowtag = getParamsByKey("buynowtag");//立即购买标记
+    var shopcartag = getParamsByKey("shopcartag");//购物车标记
+    var userLocation = {};//用户地址
+    //根据获得的值判断是从哪个页面传来的数据
+    window.onload = function () {
+        if (buynowtag == buynowtag && shopcartag == null) {
+            submitOrdersArr = myLocalStorage.get("buyNowGoods");
+            showData();
+        } else if (buynowtag == null && shopcartag == shopcartag) {
+            submitOrdersArr = settlementProductObj.get("settlementProduct");
+            showData();
+            //清除数据
+            // settlementProductObj.delete("settlementProduct");
+        }
+        userLocation = myLocalStorage.get("userLocationArr");//获取用于地址
+    }
+    //展示数据
+    function showData() {
+        var productallNum = 0;
+        var productallPrice = 0;
+        $('.consumers-product-box').html('');
+        for (var i = 0; i < submitOrdersArr.length; i++) {
+            $('.consumers-product-box').append('<div class="consumers-product">' + '<div class="consumers-product-head">' + '<img src=' + submitOrdersArr[i].productImg + '>' + '<div class="consumers-product-title">' + '<p>' + submitOrdersArr[i].title + '</p>' + '<span>分类' + submitOrdersArr[i].Color + '</span>' + '<span class="product-price" singprice=' + submitOrdersArr[i].singprice + '>￥：' + submitOrdersArr[i].singprice + '</span>' + '</div>' + '</div>' + '<div class="consumers-product-num">' + '<span>购买数量' + '</span>' + '<div class="num-img" id=' + submitOrdersArr[i].Mpid + ' type=' + submitOrdersArr[i].Color + '>' + '<img src="img/jian.png" onclick="reduce(this)">' + '<input type="text" value=' + submitOrdersArr[i].Num + '>' + '<img src="img/jia.png" onclick="addNum(this)">' + '</div>' + '</div>' + '<div class="consumers-product-send">' + '<span>配送方式' + '</span>' + '<span>快递:' + submitOrdersArr[i].Kdprice + '元</span>' + '</div>' + '<div class="consumers-product-note">' + '<p>买家备注：' + '</p>' + '<textarea placeholder="请输入备注信息">' + '</textarea>' + '</div>' + '</div>')
+            productallNum += submitOrdersArr[i].Num
+            productallPrice += submitOrdersArr[i].Price;
+        }
+        $('.consumers-product-count>p').children('span').text(productallNum + " ");
+        $('.consumers-product-count').children('span').children('span').text(productallPrice.toFixed(2));
+        $('.foot').children('span').children('span').text(productallPrice.toFixed(2));
+    }
+    /*------------------------------------------提交订单模块-------------------------------------------*/
+    //提交订单
+    var orderNumber = '';//提交订单返回的订单编码
+    var oShid = 0;//
+    var oPid = 0;//首牛商城的商品
+    var oMpid = 0;//商品ID
+    var oColor = '';//商品分类
+    var oPrice = 0;//每一种商品的总价
+    var oKdprice = 0;//快递费
+    var oNum = 0;//总数量
+    var submitShopCarOrder = {};//购物车待提交商品对象
+    var submitShopCarOrderArr = [];//购物车待提交商品数组
+    function submitOrders() {
+        // 1.立即购买的提交订单
+        if (buynowtag == buynowtag && shopcartag == null) {
+            $.ajax({
+                type: "POST",
+                url: "http://" + ip + ":" + port + "/" + app + "/orderz.do",
+                data: {
+                    method: 'submitOrderz',
+                    locationId: userLocation.lId,
+                    mallproductId: submitOrdersArr[0].Mpid,
+                    price: submitOrdersArr[0].Price,
+                    color: submitOrdersArr[0].Color,
+                    num: submitOrdersArr[0].Num,
+                    note: $("textarea").val(),
+                    type: 2,
+                    jSessionId: getJSessionId()
+                },
+                dataType: "json",
+                success: function (dataJSON) {
+                    if (dataJSON.statusCode == 200) {
+                        orderNumber = dataJSON.data.orderzNo;//订单编号
+                        showPay();//显示输入密码框
+                        getPwd();//输入密码
+                    } else {
+                        otherStates(dataJSON.statusCode);
+                    }
+                },
+                error: function (dataJSON) {
+                    alert("对不起，网络出差啦！");
+                }
+            });
+            //2.购物车购买提交订单（批量提交订单）
+        } else if (buynowtag == null && shopcartag == shopcartag) {
+            debugger;
+            var i = 0;
+            var textareaArr = document.getElementsByTagName("textarea");//留言框数组
+            for (i; i < submitOrdersArr.length; i++) {
+                //赋值
+                submitShopCarOrder = {
+                    "oShid": submitOrdersArr[i].shId,
+                    "oPid": 0,
+                    "oMpid": submitOrdersArr[i].Mpid,
+                    "oColor": submitOrdersArr[i].Color,
+                    "oPrice": submitOrdersArr[i].Price,
+                    "oKdprice": submitOrdersArr[i].Kdprice,
+                    "oNum": submitOrdersArr[i].Num,
+                    "oNote": textareaArr[i].value
+                };
+                submitShopCarOrderArr.push(submitShopCarOrder);
+            }
+            $.ajax({
+                type: "POST",
+                url: "http://" + ip + ":" + port + "/" + app + "/orderz.do",
+                data: {
+                    method: 'submitBatchOrderz',
+                    locationId: 1,
+                    data: JSON.stringify(submitShopCarOrderArr),
+                    type: 2,
+                    jSessionId: getJSessionId()
+                },
+                dataType: "json",
+                success: function (dataJSON) {
+                    if (dataJSON.statusCode == 200) {
+                        alert(dataJSON.message);
+                        orderNumber = dataJSON.data.orderzNo;
+                        showPay();//显示输入密码页面
+                        getPwd();//输入密码
+                    } else {
+                        otherStates(dataJSON.statusCode);
+                    }
+                },
+                error: function (dataJSON) {
+                    alert("对不起，网络出差啦！");
+                }
+            });
+        }
+    }
+    /*---------------------------------------支付模块-------------------------------s----------*/
+    //显示输入支付密码页面
+    function showPay() {
+        var s = document.getElementById("mask");
+        s.style.display = "block";
+
+        var l = document.getElementById("pay_box");
+        l.style.display = "block";
+        var allPrice = $(".foot").children('span').children('span').text();
+        $(".money").children('p').children('span').text(allPrice);
+    }
+    function closePay() {
+        var s = document.getElementById("mask");
+        s.style.display = "none";
+
+        var l = document.getElementById("pay_box");
+        l.style.display = "none";
+    }
+    //输入支付密码
+    var numArr = document.getElementsByClassName("number");
+    var inputPwdArr = document.getElementsByClassName("pwd");
+    function getPwd() {
+        var i = 0;
+        for (var index = 0; index < numArr.length; index++) {
+            numArr[index].onclick = function () {
+                //判断是否执行了删除密码
+                if (flag == false) {
+                    if (count == i) {
+                        i = 0;
+                        count = 0;
+                        flag = true;
+                    } else if (count > 0 && count < i) {
+                        i = i - count;
+                        count = 0;
+                        flag = true;
+                    }
+                }
+                //密码赋值
+                if (inputPwdArr[i].value == '') {
+                    inputPwdArr[i].value = this.innerText;
+                    i++;
+                    if (i == 6) {
+                        i = 0;
+                        submitPay();//密码满了6位数就访问钱包支付接口
+                    }
+                }
+            }
+        }
+    }
+    //删除密码
+    var flag = true;//判断是否执行了删除方法
+    var count = 0;//判断执行了几次删除方法
+    function deleteNum() {
+        var newinputPwdArr = [];
+        flag = false;
+        for (var i = 0; i < inputPwdArr.length; i++) {
+            if (inputPwdArr[i].value != '') {
+                newinputPwdArr.push(inputPwdArr[i]);
+                console.log(newinputPwdArr);
+            }
+        }
+        for (var j = newinputPwdArr.length - 1; j >= 0; j--) {
+            newinputPwdArr[j].value = '';
+            count++;
+            return;
+        }
+    }
+    //访问钱包支付接口
+    function submitPay() {
+        var pwd = '';
+        for (var i = 0; i < inputPwdArr.length; i++) {
+            pwd += inputPwdArr[i].value;
+        }
+        myLocalStorage.set("pwd", pwd);
+        $.ajax({
+            type: "POST",
+            url: "http://" + ip + ":" + port + "/" + app + "/pay.do",
+            data: {
+                method: 'walletPay',
+                orderzNo: orderNumber,
+                pass: getpassword(),
+                jSessionId: getJSessionId()
+            },
+            dataType: "json",
+            success: function (dataJSON) {
+                if (dataJSON.statusCode == 200) {
+                    var dataJSONs = dataJSON.data;
+                    deleteShopCarProduct();//删除后台购物车数据
+                    if (dataJSONs.trade_state == 3000) { //支付成功就跳到支付成功页面
+                        window.location.href = "paysuccess.html";
+                    } else if (dataJSONs.trade_state == 3001) {
+                        alert("订单已支付")
+                        // showMessage(dataJSONs.trade_state);
+                    } else if (dataJSONs.trade_state == 3002) {
+                        alert("支付密码错误")
+                        window.location.href = "myorder.html";
+                    } else if (dataJSONs.trade_state == 3003) {
+                        // showMessage();
+                    } else {
+                        alert("支付失败");
+                    }
+                } else {
+                    otherStates(dataJSON.statusCode);
+                }
+            },
+            error: function (dataJSON) {
+                alert("对不起，网络出差啦！");
+            }
+        });
+    }
+    //删除后台数据
+    function deleteShopCarProduct() {
+        for (var i = 0; i < submitOrdersArr.length; i++) {
+            $.ajax({
+                type: "POST",
+                url: "http://" + ip + ":" + port + "/" + app + "/shopcar.do",
+                data: {
+                    method: 'delete',
+                    data: submitOrdersArr[i].shId,
+                    jSessionId: getJSessionId()
+                },
+                dataType: "json",
+                success: function (dataJSON) {
+                    if (dataJSON.statusCode == 200) {
+                        console.log(dataJSON.message);
+                    } else {
+                        otherStates(dataJSON.statusCode);
+                    }
+                },
+                error: function (dataJSON) {
+                    alert("对不起，网络出差啦！");
+                }
+            });
+        }
+    }
+    /*------------------------------------------其他功能模块----------------------------------------*/
+    //返回
+    function toReturn() {
+        if (buynowtag == buynowtag && shopcartag == null) {
+            window.location.href = "product.html";
+        } else if (buynowtag == null && shopcartag == shopcartag) {
+            window.location.href = "shopCar.html";
+            //返回清空本地数据
+            settlementProductObj.delete("settlementProduct");
+        }
+    }
+    // 绑定+-
+    //加
+    var shopCarallPrice = 0;
+    var shopCarallNum = 0;
+    var shopCarproductallNum = 0;
+    var shopCarproductallPrice = 0;
+    var singprice = 0;
+    function addNum(obj) {
+        var input_num = obj.parentNode.children[1];
+        input_num.value = parseInt(input_num.value) + 1;
+        singprice = obj.parentNode.parentNode.parentNode.children[0].children[1].children[2].getAttribute("singprice");
+        shopCarallPrice = Number($('.consumers-product-count').children('span').children('span').text());
+        shopCarallNum = Number($('.consumers-product-count>p').children('span').text());
+        shopCarproductallNum = shopCarallNum + 1;//总数量
+        shopCarproductallPrice = shopCarallPrice + Number(singprice);//总价格
+        //更新本地数据
+        var upDateObj = {
+            "id": obj.parentNode.getAttribute("id"),
+            "typeColor": obj.parentNode.getAttribute("type"),
+            "num": parseInt(obj.parentNode.children[1].value),
+            "price": singprice * parseInt(obj.parentNode.children[1].value)
+        }
+        settlementProductObj.updateByIdType(upDateObj);
+        //页面改变值
+        $('.consumers-product-count>p').children('span').text(shopCarproductallNum + " ");
+        $('.consumers-product-count').children('span').children('span').text(shopCarproductallPrice.toFixed(2));
+        $('.foot').children('span').children('span').text(shopCarproductallPrice.toFixed(2));
+    }
+    //减
+    function reduce(obj) {
+        var input_num = obj.parentNode.children[1];
+        if (input_num.value <= 1) {
+            input_num.value = 1;
+        } else {
+            input_num.value = parseInt(input_num.value) - 1;
+        }
+        $('.consumers-product-count>p').children('span').text(input_num.value + " ");
+        singprice = obj.parentNode.parentNode.parentNode.children[0].children[1].children[2].getAttribute("singprice");
+        shopCarallPrice = Number($('.consumers-product-count').children('span').children('span').text());
+        shopCarallNum = Number($('.consumers-product-count>p').children('span').text());
+        if (shopCarallNum == 1) {
+            shopCarproductallNum = shopCarallNum;
+            shopCarproductallPrice = shopCarallPrice;
+        } else {
+            shopCarproductallNum = shopCarallNum - 1;
+            shopCarproductallPrice = shopCarallPrice - Number(singprice);
+        }
+        //更新本地数据
+        var upDateObj = {
+            "id": obj.parentNode.getAttribute("id"),
+            "typeColor": obj.parentNode.getAttribute("type"),
+            "num": parseInt(obj.parentNode.children[1].value),
+            "price": singprice * parseInt(obj.parentNode.children[1].value)
+        }
+        settlementProductObj.updateByIdType(upDateObj);
+        //页面赋值
+        $('.consumers-product-count>p').children('span').text(shopCarproductallNum + " ");
+        $('.consumers-product-count').children('span').children('span').text(shopCarproductallPrice.toFixed(2));
+        $('.foot').children('span').children('span').text(shopCarproductallPrice.toFixed(2));
+    }
+</script>
+
+</html>

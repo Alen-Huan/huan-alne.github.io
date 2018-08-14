@@ -1,0 +1,11 @@
+.nodata-shouye {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.nodata-femlei {
+    justify-content: center;
+    margin: 100px auto;
+    color: #a79898;
+}

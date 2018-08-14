@@ -1,0 +1,180 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<title>登录页面</title>
+		<link rel="stylesheet" href="css/common.css">
+		<link rel="stylesheet" href="css/login.css">
+		<script src="js/jquery-1.11.1.min.js"></script>
+		<script src="js/main.js"></script>
+		<script src="js/md5.js"></script>
+	</head>
+
+	<body>
+		<!-- S:头部 -->
+		<div class="head">
+			<div class="head-title">
+				<h3>登录</h3>
+			</div>
+		</div>
+		<!-- E:头部 -->
+		<!-- S:主要内容 -->
+		<div class="container">
+			<div class="logo-img">
+				<img src="img/logo.png">
+			</div>
+			<div class="input-box">
+				<input type="text" class="name" placeholder="请输入账号">
+				<input type="password" class="pwd " placeholder="请输入密码">
+				<div class="login">
+					<a onclick="loginShou()" href="javascript:;">登录</a>
+				</div>
+			</div>
+			<!-- S:底部 -->
+			<footer>
+				<a href="reg.html">免费注册</a>
+				<a href="#">忘记密码</a>
+			</footer>
+			<!-- E:底部 -->
+		</div>
+		<!-- E:主要内容 -->
+	</body>
+	<script>
+		// 全局变量
+		var dataJSONs = ""; //返回的用户数据
+		var _jSessionId = ""; //接受登录的id
+		var users = ""; //用户信息
+		//登录时的几种情况
+		//1.从点击收藏传来的id和标记（商品详情页），登录成功后直接到商品详情页面
+		var id = getParamsByKey("id"); //id
+		var producttag = getParamsByKey("producttag"); //商品详情页标记
+		//2.从购物车页面结算时进行登录，成功后直接到购物车页面（未登录）
+		var shopcartag = getParamsByKey("shopcartag");
+		//3.从地方特产到登录页面（未登录）
+		var typetag = getParamsByKey("typetag");
+		//4.商城首页进入收藏夹（未登录）
+		var maintag = getParamsByKey("maintag");
+		//登录方法
+		function loginShou() {
+			$.ajax({
+				type: "POST",
+				url: "http://" + ip + ":" + port + "/" + app + "/user.do",
+				data: {
+					method: 'login',
+					name: $(".name").val(),
+					pass: $(".pwd").val()
+				},
+				dataType: "json",
+				success: function(dataJSON) {
+					if(dataJSON.statusCode == 200) {
+						dataJSONs = dataJSON.data; //用户数据
+						_jSessionId = dataJSONs.jSessionId; //id
+						users = dataJSONs.user; //用户其他信息
+						if(dataJSONs.result == 1) {
+							setLocalStorageUser(); //存id
+							addShopCarProduct(); //同步购物车数据
+							getUsersLocation(); //获取默认地址
+							myLocalStorage.delete("shopCar"); //同步完成后，清空本地购物车数据
+							console.log('登录成功');
+							window.location.href = "main.html";
+//							if(producttag == producttag && shopcartag == null) {
+//								//1.判断是否是从点击收藏到登录页面
+//								window.location.href = "product.html?id=" + id + "&logintag=logintag";
+//							}
+//							if(shopcartag == shopcartag && producttag == null) {
+//								//2.从购物车页面点击结算到登录
+//								window.location.href = "shopCar.html";
+//							}
+//							if(typetag == typetag && shopcartag == null && producttag == null) {
+//								//3.从四种分类到登录页面
+//								window.location.href = "type.html";
+//							}
+//							//4.如果是第一次登录、或者其他情况登录，直接到商城主页
+//							if(maintag == maintag && shopcartag == null && producttag == null && typetag == null) {
+//								window.location.href = "main.html";
+//							}
+						} else if(dataJSONs.result == -1) {
+							alert('无该账户');
+							window.location.href = "reg.html";
+						} else if(dataJSONs.result == -2) {
+							alert('该账户已被禁用');
+						} else {
+							alert('密码错误');
+						}
+					} else {
+						otherStates(dataJSON.statusCode);
+					}
+					return;
+				},
+				error: function() {
+					console.log("对不起，网络出差啦！");
+				}
+			});
+		}
+		//存入用户数据
+		function setLocalStorageUser() {
+			myLocalStorage.set("userInfo", users);
+			myLocalStorage.set("jSessionId", _jSessionId);
+		}
+		//登录的同时更新购物车数据到后台
+		function addShopCarProduct() {
+			var shopCarProductArr = localStorage.getItem("shopCar"); //取出是json字符串
+			if(shopCarProductArr == null || _jSessionId == null) {
+				return;
+			} else {
+				$.ajax({
+					type: "POST",
+					url: "http://" + ip + ":" + port + "/" + app + "/shopcar.do",
+					data: {
+						method: 'insert',
+						data: shopCarProductArr,
+						jSessionId: getJSessionId()
+					},
+					dataType: "json",
+					success: function(dataJSON) {
+						if(dataJSON.statusCode == 200) {
+							alert(dataJSON.message);
+						} else {
+							otherStates(dataJSON.statusCode);
+						}
+					},
+					error: function(dataJSON) {
+						alert("对不起，网络出差啦！");
+					}
+				});
+			}
+		}
+		//获取用户地址
+		function getUsersLocation() {
+			if(_jSessionId == null) {
+				alert("用户未登录");
+				return;
+			} else {
+				$.ajax({
+					type: "GET",
+					url: "http://" + ip + ":" + port + "/" + app + "/user.do",
+					data: {
+						method: 'getDefaultAddress',
+						jSessionId: getJSessionId()
+					},
+					dataType: "json",
+					success: function(dataJSON) {
+						if(dataJSON.statusCode == 200) {
+							var userLocation = dataJSON.data.location;
+							myLocalStorage.set("userLocationArr", userLocation);
+						} else {
+							otherStates(dataJSON.statusCode);
+						}
+					},
+					error: function(dataJSON) {
+						alert("对不起，网络出差啦！");
+					}
+				});
+			}
+		}
+	</script>
+
+</html>

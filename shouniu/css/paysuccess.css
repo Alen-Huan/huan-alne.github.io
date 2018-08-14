@@ -1,0 +1,19 @@
+.paysuccess-box {
+  text-align: center;
+  margin: 80px auto;
+}
+
+.paysuccess-box > p {
+  font-size: 20px;
+}
+
+button {
+  margin-top: 20px;
+  color: #ffffff;
+  width: 200px;
+  height: 40px;
+  font-size: 20px;
+  border: none;
+  border-radius: 8px;
+  background-color: #ffa500;
+}

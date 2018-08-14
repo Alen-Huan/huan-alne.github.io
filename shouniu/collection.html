@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>收藏夹</title>
+    <link rel="stylesheet" href="css/collection.css">
+    <link rel="stylesheet" href="css/common.css">
+    <script src="js/jquery-1.7.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/md5.js"></script>
+</head>
+
+<body>
+    <!-- S:头部 -->
+    <div class="head">
+        <a onclick="toReturn()" class="head-left">
+            <i class="iconfont">&#xe64e;</i>
+        </a>
+        <div class="head-title">
+            <h3>收藏夹</h3>
+        </div>
+        <a class="product-circle" onclick="showMenu()">
+            <i class="iconfont">&#xe60b;</i>
+            <div id="pop-up" style="top: 39px !important;">
+                <ul>
+                    <li>
+                        <i class="iconfont">&#xe618;</i>
+                        <span>消息</span>
+                    </li>
+                    <li>
+                        <i class="iconfont">&#xe628;</i>
+                        <span>云控首页</span>
+                    </li>
+                    <li onclick="shield()">
+                        <i class="iconfont">&#xe61e;</i>
+                        <span>分享</span>
+                    </li>
+                    <li onclick="javascript:window.location.href='collection.html';">
+                        <i class="iconfont">&#xe60f;</i>
+                        <span>收藏夹</span>
+                    </li>
+                </ul>
+            </div>
+        </a>
+    </div>
+    <!-- E:头部 -->
+    <div class="product-box">
+        <ul id="product_list">
+            <li>
+                <img src="img/fushi.png">
+                <p>洁柔湿巾 湿纸巾 倍厚倍柔独立包装12包套装 湿巾 洁柔湿巾 湿纸巾 倍厚倍柔独立包装12包套装 湿巾
+                </p>
+                <p>￥50.80</p>
+            </li>
+        </ul>
+    </div>
+    <!-- 遮罩 -->
+    <div id="mask">
+    </div>
+    <div id="log_window">
+        <ul>
+            <li id="qqkongjian">
+                <a class="chat-qq">
+                    <i class="iconfont" style="color: #6ac8ef;">&#xe60c;</i>
+                    <span> QQ空间 </span>
+                </a>
+            </li>
+            <li id="douban">
+                <a class="chat-qq">
+                    <i class="iconfont" style="color: #7df93f;">&#xe662;</i>
+                    <span>豆瓣</span>
+                </a>
+            </li>
+            <li id="xinlang">
+                <a class="chat-qq">
+                    <i class="iconfont" style="color: #f7c54f;">&#xe65f;</i>
+                    <span>新浪微博</span>
+                </a>
+            </li>
+            <li id="baidutieba">
+                <a class="chat-qq">
+                    <i class="iconfont" style="color: #1d71f5;">&#xe65e;</i>
+                    <span>百度贴吧</span>
+                </a>
+            </li>
+            <li>
+                <a class="chat-qq" style="color: #646c7a;">
+                    <i class="iconfont">&#xe600;</i>
+                    <span>腾讯微博</span>
+                </a>
+            </li>
+            <li>
+                <a class="chat-qq" style="color: #646c7a;">
+                    <i class="iconfont">&#xe601;</i>
+                    <span>FaceBook</span>
+                </a>
+            </li>
+        </ul>
+        <a href="javascript:cancel_shield()" class="cancel">取消</a>
+    </div>
+    <script>
+        //获取收藏列表商品
+        var collectedArr = [];
+        $.ajax({
+            type: "GET",
+            url: "http://" + ip + ":" + port + "/" + app + "/collection.do",
+            data: {
+                method: 'getCollectionList',
+                page: 1,
+                jSessionId: getJSessionId()
+            },
+            dataType: "json",
+            success: function (dataJSON) {
+                if (dataJSON.statusCode == 200) {
+                    console.log(dataJSON.data.collectionList);
+                    collectedArr = dataJSON.data.collectionList;
+                    $('#product_list').html('');
+                    for (var i = 0; i < collectedArr.length; i++) {
+                        $('#product_list').append('<li onclick="javascript:window.location.href=\'product.html?id=' +
+                            collectedArr[i].coMpid + '\';">' + '<img src=' + collectedArr[i].coSimg + '>' + '<p>' + collectedArr[i].coTitle + '</p>' + '<p>' + collectedArr[i].coPrice + '</p>' + '</li>')
+                    }
+                } else {
+                    otherStates(dataJSON.statusCode);
+                }
+            },
+            error: function (dataJSON) {
+                alert("对不起，网络出差啦");
+            }
+        });
+    </script>
+</body>
+
+</html>

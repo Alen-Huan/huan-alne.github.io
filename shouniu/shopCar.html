@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>购物车</title>
+    <link rel="stylesheet" href="css/shopCar.css">
+    <link rel="stylesheet" href="css/common.css">
+    <script src="js/jquery-1.7.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/md5.js"></script>
+</head>
+
+<body style="padding-top:50px;padding-bottom:50px;">
+    <!-- S:头部 -->
+    <div class="head">
+        <a href="javascript:viod(0)" class="head-left" onclick="toReturn()">
+            <i class="iconfont">&#xe64e;</i>
+        </a>
+        <div class="head-title">
+            <h3>购物车
+                <span>
+                    (
+                    <span>0</span> )</span>
+            </h3>
+        </div>
+        <button id="editAll" onclick="showAll()">编辑</button>
+    </div>
+    <!-- E:头部 -->
+    <div class="product-box">
+        <ul>
+        </ul>
+        <div class="noProduct">
+            请选择结算的商品
+        </div>
+    </div>
+    <footer>
+        <div class="check-all">
+            <input type="checkbox" name="checkAll" id="checkAll" style="margin-top: 5px;" onclick="checkAllItem()">
+            <label for="checkAll" style="top: 5px;left: 20px;"></label>
+            <p>全选</p>
+        </div>
+        <div class="countAll">
+            <span>合计：￥0.00</span>
+            <p>不含运费</p>
+        </div>
+        <span onclick="settleOrder()" class="settle-Order">
+            结算
+            <span>(0)</span>
+        </span>
+    </footer>
+</body>
+<script>
+    /*---------------------------------------------展示数据模块--------------------------------------------*/
+    //全局变量
+    var allPrice = 0;
+    var shopCarProductArr = [];
+    var _jSessionId = myLocalStorage.get('jSessionId');//判断是否登录
+    //立即执行函数
+    window.onload = function () {
+        if (_jSessionId == null) {
+            shopCarProductArr = shopCar.get("shopCar");
+            displayData();
+        } else {
+            getShopCarBackstage();
+        }
+    }
+    //从后台拿购物车数据
+    function getShopCarBackstage() {
+        $.ajax({
+            type: "GET",
+            url: "http://" + ip + ":" + port + "/" + app + "/shopcar.do",
+            data: {
+                method: 'getShopcarList',
+                jSessionId: getJSessionId()
+            },
+            dataType: "json",
+            success: function (dataJSON) {
+                if (dataJSON.statusCode == 200) {
+                    shopCarProductArr = dataJSON.data.shopcarList;
+                    console.log(shopCarProductArr);
+                    displayData();
+                } else {
+                    otherStates(dataJSON.statusCode);
+                }
+            },
+            error: function (dataJSON) {
+                alert("对不起，网络出差啦！");
+            }
+        });
+    }
+    //显示数据
+    function displayData() {
+        for (var i = 0; i < shopCarProductArr.length; i++) {
+            $('.product-box>ul').append('<li id=' + shopCarProductArr[i].shMpid + ' kprice=' + shopCarProductArr[i].shKdprice + ' shopcarid=' + shopCarProductArr[i].shId + '>' + '<div class="check-box">' + "<input type='checkbox' id='select" + i + "' name='check' onclick='checkItem(this)' singAllprice=" + shopCarProductArr[i].shPrice + ">" + '<label for="select' + i + '">' + '</label>' + '</div>' + '<a class="product" href="product.html?id=' + shopCarProductArr[i].shMpid + '&shopcartag=shopcartag">' + ' <img  productimg=' + shopCarProductArr[i].shSimg + '  src="' + shopCarProductArr[i].shSimg + '">' + '<div class="product-txt">' + '<p>' + shopCarProductArr[i].shTitle + '' + '</p>' + '<p type=' + shopCarProductArr[i].shColor + '>' + shopCarProductArr[i].shColor + '<span class="product-num" shnum=' + shopCarProductArr[i].shNum + '>x' + shopCarProductArr[i].shNum + '' + '</span>' + '</p>' + '<span singprice=' + (shopCarProductArr[i].shPrice / shopCarProductArr[i].shNum).toFixed(2) + ' oneprice=' + shopCarProductArr[i].shPrice + '>￥：' + shopCarProductArr[i].shPrice + '</span>' + ' <button onclick="showEdit(this,event)">' + '编辑' + '</button>' + '</div>' + '</a>' + ' <div class="edit-box">' + ' <div class="edit">' + '<div class="edit-num">' + '  <img src="img/jian.png" onclick="reduce(this,event)">' + ' <input type="text" value="' + shopCarProductArr[i].shNum + '" id="input-num">' + '<img src="img/jia.png" onclick="addNum(this)">' + '</div>' + ' <div class="edit-btn">' + ' <button onclick="deleteProduct(this)">' + '删除' + '</button>' + '<button onclick="hideEdit(this,event)">' + '完成' + '</button>' + '</div>' + '</div>' + '</div>' + '</li>');
+        }
+        $('.head-title>h3').children('span').children('span').text(shopCarProductArr.length);
+    }
+    /*----------------------------------------编辑模块------------------------------------*/
+    // 显示所有
+    var editAll = document.getElementById("editAll");
+    var allProduct_txt = document.getElementsByClassName("product-txt");
+    var allEdit_box = document.getElementsByClassName("edit-box");
+    var toggole = true;
+    function showAll() {
+        if (toggole) {
+            editAll.innerHTML = "完成";
+            for (var i = 0; i < allProduct_txt.length; i++) {
+                allProduct_txt[i].style.display = "none";
+            }
+            for (var j = 0; j < allEdit_box.length; j++) {
+                allEdit_box[j].style.display = "block";
+            }
+        } else {
+            var num = 0;
+            var productPrice = 0;
+            var type = '';
+            var id = 0;
+            editAll.innerHTML = "编辑";
+            for (var i = 0; i < allProduct_txt.length; i++) {
+                allProduct_txt[i].style.display = "block";
+            }
+            for (var j = 0; j < allEdit_box.length; j++) {
+                allEdit_box[j].style.display = "none";
+                if (_jSessionId == null) {
+                    //更新本地数据'
+                    id = Number(allEdit_box[j].parentNode.getAttribute("id"));
+                    num = Number(allEdit_box[j].children[0].children[0].children[1].value);
+                    price = allEdit_box[j].parentNode.children[1].children[1].children[2].getAttribute("singprice");
+                    productPrice = (num * price).toFixed(2);
+                    type = allEdit_box[j].parentNode.children[1].children[1].children[1].getAttribute("type");
+                    var changeProduct = {
+                        "shId": id,
+                        "shColor": type,
+                        "shNum": num,
+                        "shPrice": parseFloat(productPrice)
+                    };
+                    allEdit_box[j].parentNode.children[1].children[1].children[1].children[0].innerHTML = "x" + num;
+                    allEdit_box[j].parentNode.children[1].children[1].children[2].innerHTML = "￥：" + productPrice;
+                    shopCar.updateByIdType(changeProduct);
+                } else {
+                    //更新后台数据
+                    var changeProductArr = [changeProduct];
+                    $.ajax({
+                        type: "POST",
+                        url: "http://" + ip + ":" + port + "/" + app + "/shopcar.do",
+                        data: {
+                            method: 'update',
+                            data: JSON.stringify(changeProductArr),
+                            jSessionId: getJSessionId()
+                        },
+                        dataType: "json",
+                        success: function (dataJSON) {
+                            if (dataJSON.statusCode == 200) {
+                                alert(dataJSON.message);
+                            } else {
+                                otherStates(dataJSON.statusCode);
+                            }
+                        },
+                        error: function (dataJSON) {
+                            alert("对不起，网络出差啦！");
+                        }
+                    });
+                }
+            }
+        }
+        toggole = !toggole;
+    }
+    // 绑定+-
+    //加
+    function addNum(obj) {
+        var input_num = obj.parentNode.children[1];
+        input_num.value = parseFloat(input_num.value) + 1;
+    }
+    //减
+    function reduce(obj) {
+        var input_num = obj.parentNode.children[1];
+        if (input_num.value <= 0) {
+            input_num.value = 0;
+        } else {
+            input_num.value = parseFloat(input_num.value) - 1;
+        }
+    }
+    // 显示编辑
+    function showEdit(obj, e) {
+        stopDefault(e);  //阻止默认事件
+        obj.parentNode.parentNode.parentNode.children[2].style.display = "block";
+        obj.parentNode.style.display = "none";
+    }
+    //完成
+    function hideEdit(obj, e) {
+        obj.parentNode.parentNode.parentNode.style.display = "none";
+        obj.parentNode.parentNode.parentNode.parentNode.children[1].children[1].style.display = "block";
+        var price = parseFloat(obj.parentNode.parentNode.parentNode.parentNode.children[1].children[1].children[2].getAttribute("singprice"));//单价
+        var num = parseFloat(obj.parentNode.parentNode.children[0].children[1].value);//数字
+        // 每一种产品的价格
+        var productPrice = parseFloat((price * num).toFixed(2));//产品的价格
+        var id = parseFloat(obj.parentNode.parentNode.parentNode.parentNode.getAttribute("id"));//商品的id
+        var type = obj.parentNode.parentNode.parentNode.parentNode.children[1].children[1].children[1].getAttribute("type");//获得产品的类型
+        //页面数据改变
+        obj.parentNode.parentNode.parentNode.parentNode.children[1].children[1].children[2].innerHTML = "￥：" + productPrice;
+        obj.parentNode.parentNode.parentNode.parentNode.children[1].children[1].children[1].children[0].innerHTML = "x" + num;
+        var changeProduct = {
+            "shId": id,
+            "shColor": type,
+            "shNum": num,
+            "shPrice": productPrice
+        };
+        if (_jSessionId == null) {
+            // 更新本地数据
+            shopCar.updateByIdType(changeProduct);
+        } else {
+            //更新后台数据
+            var changeProductArr = [changeProduct];
+            $.ajax({
+                type: "POST",
+                url: "http://" + ip + ":" + port + "/" + app + "/shopcar.do",
+                data: {
+                    method: 'update',
+                    data: JSON.stringify(changeProductArr),
+                    jSessionId: getJSessionId()
+                },
+                dataType: "json",
+                success: function (dataJSON) {
+                    if (dataJSON.statusCode == 200) {
+                        alert(dataJSON.message);
+                    } else {
+                        otherStates(dataJSON.statusCode);
+                    }
+                },
+                error: function (dataJSON) {
+                    alert("对不起，网络出差啦！");
+                }
+            });
+        }
+    }
+    /*-------------------------------------删除模块--------------------------------------*/
+    //删除数据
+    function deleteProduct(obj) {
+        var deleteLi = obj.parentNode.parentNode.parentNode.parentNode;
+        var shopcarid = Number(deleteLi.getAttribute("shopcarid"));
+        var id = Number(deleteLi.getAttribute("id"));
+        var a = $('.head-title>h3').children('span').children('span').text();
+        var a = $('.head-title>h3').children('span').children('span').text(a - 1);
+        deleteLi.parentNode.removeChild(deleteLi);//删除界面元素
+        //删除本地数据
+        if (_jSessionId == null) {
+            shopCarProductArr = shopCar.get("shopCar");
+            for (var i = 0; i < shopCarProductArr.length; i++) {
+                if (shopCarProductArr[i].shMpid == id) {
+                    shopCarProductArr.splice(i, shopCarProductArr[i]);
+                }
+            }
+            shopCar.set("shopCar", shopCarProductArr);
+            // $('.head-title>h3').children('span').children('span').text(shopCarProductArr.length);
+        } else {
+            //更新删除后台数据
+            $.ajax({
+                type: "POST",
+                url: "http://" + ip + ":" + port + "/" + app + "/shopcar.do",
+                data: {
+                    method: 'delete',
+                    data: shopcarid,
+                    jSessionId: getJSessionId()
+                },
+                dataType: "json",
+                success: function (dataJSON) {
+                    if (dataJSON.statusCode == 200) {
+                        console.log(dataJSON.message);
+                    } else {
+                        otherStates(dataJSON.statusCode);
+                    }
+                },
+                error: function (dataJSON) {
+                    alert("对不起，网络出差啦！");
+                }
+            });
+        }
+    }
+    /*--------------------------------选择、单选模块----------------------------------------*/
+    //全选、单选
+    var checkAll = document.getElementById("checkAll");
+    var checkItemArr = document.getElementsByName("check");
+    // 全选
+    function checkAllItem() {
+        var allPrice = 0;
+        var onePrice = 0;
+        var allNum = 0;
+        var singNum = 0;
+        if (checkAll.checked) {
+            for (var i = 0; i < checkItemArr.length; i++) {
+                checkItemArr[i].checked = true;
+                singNum = Number(checkItemArr[i].parentNode.parentNode.children[1].children[1].children[1].children[0].getAttribute("shnum"));
+                allNum += singNum;
+                onePrice = Number(checkItemArr[i].parentNode.parentNode.children[1].children[1].children[2].getAttribute("oneprice"));
+                allPrice += onePrice;
+            }
+            $('.settle-Order').children('span').text("(" + allNum + ")");
+            $('.countAll').children('span').text("合计：￥" + allPrice.toFixed(2));
+        } else {
+            for (var i = 0; i < checkItemArr.length; i++) {
+                checkItemArr[i].checked = false;
+            }
+            $('.settle-Order').children('span').text("(" + 0 + ")");
+            $('.countAll').children('span').text("合计：￥" + 0);
+        }
+    }
+    // 单选
+    function checkItem(obj) {
+        var allPrice = 0;
+        var count = 0;
+        var onePrice = 0;
+        var allNum = 0;
+        var singNum = 0;
+        for (var i = 0; i < checkItemArr.length; i++) {
+            if (checkItemArr[i].checked) {
+                count++;
+                singNum = Number(checkItemArr[i].parentNode.parentNode.children[1].children[1].children[1].children[0].getAttribute("shnum"));
+                allNum += singNum;
+                onePrice = Number(checkItemArr[i].parentNode.parentNode.children[1].children[1].children[2].getAttribute("oneprice"));
+                allPrice += onePrice;
+            }
+            if (count == checkItemArr.length) {
+                checkAll.checked = true;
+                $('.settle-Order').children('span').text("(" + allNum + ")");
+                $('.countAll').children('span').text("合计：￥" + allPrice.toFixed(2));
+            } else {
+                checkAll.checked = false;
+                $('.settle-Order').children('span').text("(" + allNum + ")");
+                $('.countAll').children('span').text("合计：￥" + allPrice.toFixed(2));
+            }
+        }
+    }
+    /*---------------------------------------------------结算模块----------------------------------------*/
+    //结算
+    var settle_Order = document.getElementsByClassName("settle-Order")[0];
+    var noProducts = document.getElementsByClassName("noProduct")[0];
+    var number = settle_Order.children[0].innerHTML;
+    function settleOrder() {
+        var settle_Order = document.getElementsByClassName("settle-Order")[0];
+        var number = settle_Order.children[0].innerHTML;
+        //如果用户未登录，跳转到登录页面
+        if (_jSessionId == null) {
+            window.location.href = "login.html?shopcartag=shopcartag";
+        } else {
+            if (number == "(0)") {
+                noProducts.style.display = 'block';
+                setTimeout("hide()", 1000);
+            } else {
+                var checkArr = document.getElementsByName("check");
+                var productId = 0;
+                var allPrice = 0;
+                var onePrice = 0;
+                var singPrice = 0;
+                var singNum = 0;
+                var productType = '';
+                var productImg = '';
+                var productTitle = '';
+                var kPrice = 0;
+                var settlementProduct = {};
+                for (var i = 0; i < checkArr.length; i++) {
+                    if (checkArr[i].checked) {
+                        productTitle = checkArr[i].parentNode.parentNode.children[1].children[1].children[0].innerHTML;
+                        productImg = checkArr[i].parentNode.parentNode.children[1].children[0].getAttribute("productimg");
+                        productType = checkArr[i].parentNode.parentNode.children[1].children[1].children[1].getAttribute("type");
+                        singNum = Number(checkArr[i].parentNode.parentNode.children[1].children[1].children[1].children[0].getAttribute("shnum"));
+                        onePrice = Number(checkArr[i].parentNode.parentNode.children[1].children[1].children[2].getAttribute("oneprice"));
+                        singPrice = Number((onePrice / singNum).toFixed(2));
+                        productId = checkArr[i].parentNode.parentNode.getAttribute("id");
+                        shopcarid = checkArr[i].parentNode.parentNode.getAttribute("shopcarid");
+                        kPrice = checkArr[i].parentNode.parentNode.getAttribute("kprice");
+                        settlementProduct = {
+                            "shId": Number(shopcarid),
+                            "title": productTitle,
+                            "productImg": productImg,
+                            "Color": productType,
+                            "singprice": singPrice,
+                            "Num": singNum,
+                            "Kdprice": Number(kPrice),
+                            "Price": onePrice,
+                            "Mpid": Number(productId),
+                        };
+                        settlementProductObj.set(settlementProduct);
+                    }
+                }
+                window.location.href = "order.html?shopcartag=shopcarTag";
+            }
+        }
+    }
+    //提示消息
+    function hide() {
+        noProducts.style.display = "none";
+    }
+    /*----------------------------------------------------小功能模块--------------------------------------------*/
+    //返回
+    // function toReturn() {
+    //     history.back();
+    //     // var producttagshopcartag = getParamsByKey("producttagshopcartag");
+    //     // if (producttagshopcartag == producttagshopcartag) {
+    //     //     var productId = myLocalStorage.get("productId");
+    //     //     window.location.href = "product.html?id=" + productId + "";
+    //     // }
+    // }
+</script>
+
+</html>

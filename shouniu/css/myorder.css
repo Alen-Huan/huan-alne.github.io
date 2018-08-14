@@ -1,0 +1,95 @@
+body {
+    background-color: #eee;
+}
+
+/*头部样式*/
+
+.head {
+    display: flex;
+    height: 48px;
+    text-align: center;
+    align-items: center;
+    color: #a9b2c0;
+    background-color: #2a2d33;
+}
+
+.head-left {
+    color: #a9b2c0;
+    flex: 1;
+}
+
+.head-title {
+    flex: 9;
+}
+
+.head-title>h3 {
+    font-size: 16px;
+}
+
+/*产品*/
+
+#product_list {
+    width: 88%;
+    margin-left: 11px;
+    margin-top: 10px;
+}
+
+ul li {
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    margin-bottom: 10px;
+}
+
+.delete-box {
+    margin: 0 10px;
+    height: 25px;
+    line-height: 25px;
+}
+
+.delete-box>span {
+    float: left;
+}
+
+.delete-box>i {
+    float: right;
+}
+
+.productInfo {
+    display: flex;
+    align-items: center;
+    padding: 0 10px;
+    height: 90px;
+    font-size: 14px;
+    background-color: #e6e6e6;
+}
+
+img {
+    width: 70px;
+}
+
+.productInfo>p {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.othersInfo {
+    margin: 0 10px;
+    height: 30px;
+    line-height: 30px;
+    font-size: 12px;
+}
+
+.othersInfo>span:last-child {
+    float: right;
+}
+
+.price {
+    color: red;
+    font-size: 18px;
+}
+
+.done {
+    font-size: 12px;
+    color: #35b8a7;
+}

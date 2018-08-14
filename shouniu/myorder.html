@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>我的订单</title>
+    <link rel="stylesheet" href="css/common.css">
+    <link rel="stylesheet" href="css/myorder.css">
+    <script src="js/main.js"></script>
+    <script src="js/jquery-1.7.js"></script>
+    <script src="js/md5.js"></script>
+</head>
+
+<body>
+    <!-- S:头部 -->
+    <div class="head">
+        <div class="head-left">
+            <i class="iconfont" onclick="javascript:window.location.href='main.html?';">&#xe64e;</i>
+        </div>
+        <div class="head-title">
+            <h3>我的订单</h3>
+        </div>
+    </div>
+    <!-- E:头部 -->
+    <div>
+        <ul id="product_list">
+            <li>
+                <div class="delete-box">
+                    <i class="iconfont" onclick="deleteProduct(this)">&#xe642;</i>
+                </div>
+                <div class="productInfo">
+                    <img src="img/fushi.png" alt="">
+                    <p>首牛多功能充电器 首牛多功能充电器 首牛多功能充电器</p>
+                </div>
+                <div class="othersInfo">
+                    <span>数量： x
+                        <span>1</span>
+                    </span>
+                    <span class="price">
+                        ￥
+                        <span>298.00</span>
+                        (
+                        <span class="done">
+                            未完成
+                        </span>
+                        )
+                    </span>
+                </div>
+            </li>
+        </ul>
+    </div>
+</body>
+<script>
+    /*------------------------------------获取订单列表模块--------------------------------------*/
+    //全局变量
+    var orderArr = [];
+    $.ajax({
+        type: "GET",
+        url: "http://" + ip + ":" + port + "/" + app + "/orderz.do",
+        data: {
+            method: 'getOrderzList',
+            page: 1,
+            jSessionId: getJSessionId()
+        },
+        dataType: "json",
+        success: function (dataJSON) {
+            if (dataJSON.statusCode == 200) {
+                orderArr = dataJSON.data.orderList;
+                console.log(orderArr);
+                showOrder();
+            } else {
+                otherStates(dataJSON.statusCode);
+            }
+        },
+        error: function (dataJSON) {
+            alert("对不起，网络出差啦！");
+        }
+    });
+    //展示数据
+    function showOrder() {
+        $("#product_list").html("");
+        // + orderArr[i].oState +
+        for (var i = 0; i < orderArr.length; i++) {
+            $("#product_list").append('<li oId=' + orderArr[i].oId + ' id="product_box"  onclick="javascript:window.location.href=\'orderinfo.html\';">' + '<div class="delete-box">' + '<span>' + orderArr[i].oDate + '</span>' + '<i class="iconfont" onclick="deleteProduct(this)">&#xe642;' + '</i>' + '</div>' + '<div class="productInfo">' + '<img src=' + orderArr[i].oSimg + '>' + '<p>' + orderArr[i].oTitle + '</p>' + '</div>' + '<div class="othersInfo">' + '<span>数量：x' + '<span>' + orderArr[i].oNum + '</span>' + '</span>' + '<span class="price">￥' + '<span>' + orderArr[i].oTotalprice + '</span>' + '<span class="done">' + '</span>' + '</span>' + '</div>' + '</li>');
+        }
+        var oStateArr = document.getElementsByClassName("done");
+        var i = 0
+        //绑定状态
+        for (i; i < oStateArr.length; i++) {
+            if (orderArr[i].oState == 0) {
+                oStateArr[i].innerHTML = '(未支付)';
+            } else if (orderArr[i].oState == 1) {
+                oStateArr[i].innerHTML = '(待发货)';
+            } else if (orderArr[i].oState == 2) {
+                oStateArr[i].innerHTML = '(已发货)';
+            } else if (orderArr[i].oState == 3) {
+                oStateArr[i].innerHTML = '(已签收)';
+            } else if (orderArr[i].oState == 4) {
+                oStateArr[i].innerHTML = '(已完成)';
+            } else if (orderArr[i].oState == 5) {
+                oStateArr[i].innerHTML = '(已关闭)';
+            }
+        }
+    }
+    function deleteProduct(obj) {
+        $.ajax({
+            type: "POST",
+            url: "http://" + ip + ":" + port + "/" + app + "/orderz.do",
+            data: {
+                method: 'delOrderz',
+                jSessionId: getJSessionId(),
+                id: Number(obj.parentNode.parentNode.getAttribute("oId"))
+            },
+            dataType: "json",
+            success: function (dataJSON) {
+                console.log(dataJSON);
+                if (dataJSON.statusCode == 200) {
+                    alert(dataJSON.message);
+                } else {
+                    otherStates(dataJSON.statusCode);
+                }
+            },
+            error: function (dataJSON) {
+                alert("对不起，网络出差啦！");
+            }
+        });
+    }
+</script>
+
+</html>

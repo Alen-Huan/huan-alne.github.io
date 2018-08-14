@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>分类详情页</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/common.css">
+    <link rel="stylesheet" href="css/nodata.css">
+    <script src="js/jquery-1.7.js"></script>
+    <script src="js/main.js"></script>
+</head>
+
+<body>
+    <!-- s:标题栏 -->
+    <div class="title">
+        <a onclick="toReturn()">
+            <i class="iconfont">&#xe64e;</i>
+        </a>
+        <h3>首牛商城</h3>
+        <div class="popou-list" onclick="showMenu()">
+            <i class="iconfont">&#xe60b;</i>
+            <!-- 弹出显示 -->
+            <div id="pop-up">
+                <ul>
+                    <li>
+                        <i class="iconfont">&#xe618;</i>
+                        <span>消息</span>
+                    </li>
+                    <li>
+                        <i class="iconfont">&#xe628;</i>
+                        <span>云控首页</span>
+                    </li>
+                    <li onclick="shield()">
+                        <i class="iconfont">&#xe61e;</i>
+                        <span>分享</span>
+                    </li>
+                    <li onclick="toProduct()">
+                        <i class="iconfont">&#xe60f;</i>
+                        <span>收藏夹</span>
+                    </li>
+                </ul>
+            </div>
+            <!-- 弹出显示 -->
+        </div>
+    </div>
+    <!-- e:标题栏 -->
+    <!-- 头部 -->
+    <div class="head">
+        <div class="search-box">
+            <input type="text" placeholder="搜索商品">
+            <i class="iconfont" onclick="search()">&#xe608;</i>
+        </div>
+        <a href="shopCar.html?maintag=maintag" class="circle">
+            <i class="iconfont">&#xe622;</i>
+        </a>
+    </div>
+    <!-- 头部 -->
+    <!-- 导航 -->
+    <nav>
+        <div id="container">
+            <div id="list">
+            </div>
+        </div>
+    </nav>
+    <!-- 详细内容 -->
+    <div class="content">
+        <ul class="product-list">
+        </ul>
+    </div>
+    <!--分享模块 -->
+    <div id="mask">
+    </div>
+    <div id="log_window">
+        <ul>
+            <li id="qqkongjian">
+                <a class="chat-qq">
+                    <i class="iconfont" style="color: #6ac8ef;">&#xe60c;</i>
+                    <span> QQ空间 </span>
+                </a>
+            </li>
+            <li id="douban">
+                <a class="chat-qq">
+                    <i class="iconfont" style="color: #7df93f;">&#xe662;</i>
+                    <span>豆瓣</span>
+                </a>
+            </li>
+            <li id="xinlang">
+                <a class="chat-qq">
+                    <i class="iconfont" style="color: #f7c54f;">&#xe65f;</i>
+                    <span>新浪微博</span>
+                </a>
+            </li>
+            <li id="baidutieba">
+                <a class="chat-qq">
+                    <i class="iconfont" style="color: #1d71f5;">&#xe65e;</i>
+                    <span>百度贴吧</span>
+                </a>
+            </li>
+            <li>
+                <a class="chat-qq" style="color: #646c7a;">
+                    <i class="iconfont">&#xe600;</i>
+                    <span>腾讯微博</span>
+                </a>
+            </li>
+            <li>
+                <a class="chat-qq" style="color: #646c7a;">
+                    <i class="iconfont">&#xe601;</i>
+                    <span>FaceBook</span>
+                </a>
+            </li>
+        </ul>
+        <a href="javascript:cancel_shield()" class="cancel">取消</a>
+    </div>
+    <!--分享模块 -->
+</body>
+<script>
+    $.ajax({
+        type: "GET",
+        url: "http://" + ip + ":" + port + "/" + app + "/message.do",
+        data: {
+            method: 'getLastAdList',
+            level: 2
+        },
+        dataType: "json",
+        success: function (dataJSON) {
+            if (dataJSON.statusCode == 200) {
+                var dataJSONs = dataJSON.data.ad;
+                console.log(dataJSONs);
+                $('#container>#list').html("");
+                $('#container>#buttons').html("");
+
+                for (var i in dataJSONs) {
+                    $('#container>#list').append('<img src="' + dataJSONs[i].aImg +
+                        '" height="180px" width="100%">')
+                }
+            } else {
+                $('#container>div[id="list"]').remove();
+                $('#container>div[id="buttons"]').remove();
+                $('#container').html("没有更多的数据了！！");
+                $('#container').attr("class", 'nodata-shouye');
+            }
+        }
+    });
+    // 接受传来的分类类型
+    var num = getParamsByKey("num");
+    window.onload = function changeTitle() {
+        if (num == 1) {
+            $(".title>h3").text("地方特产");
+        } else if (num == 2) {
+            $(".title>h3").text("母婴用品");
+        } else if (num == 3) {
+            $(".title>h3").text("生活日用");
+        } else if (num == 4) {
+            $(".title>h3").text("数码家电");
+        }
+    }
+    //向后台请求分类
+    $.ajax({
+        type: "GET",
+        url: "http://" + ip + ":" + port + "/" + app + "/product.do",
+        data: {
+            method: 'getMallproductList',
+            page: 1,
+            type: num
+        },
+        dataType: "json",
+        success: function (dataJSON) {
+            if (dataJSON.statusCode == 200) {
+                var dataJSONs = dataJSON.data.mallproductList;
+                for (var i in dataJSONs) {
+                    $('.product-list').append('<li onclick="javascript:window.location.href=\'product.html?id=' +
+                        dataJSONs[i].mpId + '\';">' + '<a class="img-product">' + '<img src="' +
+                        dataJSONs[i].mpSimg +
+                        '">' + '</a>' +
+                        '<div class="img-txt" >' + '<p>' + dataJSONs[i].mpTitle + '</p>' + '<p>' +
+                        dataJSONs[i].mpPrice + '</p>' +
+                        '<span>' + dataJSONs[i].mpOldprice + '</span>' + '</div>' + '</li>');
+                }
+            } else {
+                $('nav').css('background', 'none');
+                $('.product-list').append('<li id=liId>没有更多的数据了！！！</li>');
+                $('#liId').attr("class", 'nodata-femlei');
+            }
+        }
+    });
+    //到收藏夹
+    function toProduct() {
+        var _jSessionId = myLocalStorage.get("jSessionId"); //判断用户是否登录
+        if (_jSessionId == null) {
+            window.location.href = "login.html?typetag=typetag";
+        } else {
+            window.location.href = "collection.html";
+        }
+    }
+</script>
+
+
+</html>

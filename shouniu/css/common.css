@@ -1,0 +1,103 @@
+* {
+    padding: 0;
+    margin: 0;
+    font-family: "宋体";
+}
+
+ul li {
+    list-style: none;
+}
+
+ol li {
+    list-style-type: none;
+}
+
+a {
+    text-decoration: none;
+}
+
+@font-face {
+    font-family: "iconfont";
+    /* project id 766653 */
+    src: url("http://at.alicdn.com/t/font_766653_wx2wyzavf1b.eot");
+    src: url("http://at.alicdn.com/t/font_766653_wx2wyzavf1b.eot?#iefix") format("embedded-opentype"), url("http://at.alicdn.com/t/font_766653_wx2wyzavf1b.woff") format("woff"), url("http://at.alicdn.com/t/font_766653_wx2wyzavf1b.ttf") format("truetype"), url("http://at.alicdn.com/t/font_766653_wx2wyzavf1b.svg#iconfont") format("svg");
+}
+
+.iconfont {
+    font-family: "iconfont";
+    font-size: 16px;
+    font-style: normal;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/*遮罩*/
+
+#mask {
+    width: 100%;
+    height: 100%;
+    background-color: rgb(26, 17, 17);
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 2;
+    opacity: 0.3;
+    /*兼容IE8及以下版本浏览器*/
+    filter: alpha(opacity=30);
+    display: none;
+}
+
+/*弹出分享、收藏夹菜单样式*/
+
+#pop-up {
+    z-index: 100;
+    display: none;
+    position: absolute;
+    line-height: 30px;
+    width: 90px;
+    right: 0px;
+    top: 34px;
+    padding: 10px;
+    border-radius: 10px;
+    color: #fff;
+    text-align: left;
+    background-color: #000;
+    opacity: 0.7;
+}
+
+.address {
+    display: flex;
+    height: 70px;
+    padding: 0 10px;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.address img {
+    width: 20px;
+    height: 32px;
+}
+
+.consumers {
+    margin: 0 10px;
+    color: #000;
+}
+
+.consumers span:nth-child(1) {
+    margin-right: 20px;
+    font-size: 12px;
+}
+
+.consumers span:nth-child(2) {
+    font-size: 12px;
+}
+
+.consumers p {
+    color: #7b7171;
+    margin-top: 10px;
+    font-size: 12px;
+}
+
+.address i {
+    color: #a9b2c0;
+}

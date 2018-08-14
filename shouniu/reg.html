@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>注册</title>
+    <link rel="stylesheet" href="css/common.css">
+    <link rel="stylesheet" href="css/login.css">
+    <link rel="stylesheet" href="css/reg.css">
+    <script src="js/main.js"></script>
+    <script src="js/jquery-1.7.js"></script>
+</head>
+
+<body>
+    <!-- S:头部 -->
+    <div class="head">
+        <a class="head-left" href="login.html">
+            <i class="iconfont">&#xe64e;</i>
+        </a>
+        <div class="head-title">
+            <h3>注册</h3>
+        </div>
+    </div>
+    <!-- E:头部 -->
+    <div class="container">
+        <div class="input-box">
+            <input type="text" class="name" placeholder="请输入手机号码">
+            <div class="message-box">
+                <input type="email" class="information" placeholder="请输入4位短信验证码">
+                <button class="code" onclick="getMessage()">获取验证码</button>
+            </div>
+            <input type="password" class="pwd set-pwd" placeholder="设置登录密码">
+            <input type="password" class="pwd " placeholder="重置密码">
+            <div class="login">
+                <a onclick="register()">提交</a>
+            </div>
+        </div>
+        <!-- S:底部 -->
+        <footer>
+            <input id="item1" type="checkbox" value="我已阅读并同意" name="item1">
+            <label for="item1"></label>
+            <span>我已阅读并同意</span>
+            <a href="agreement.html">《用户注册/使用协议》</a>
+        </footer>
+        <!-- E:底部 -->
+    </div>
+</body>
+<script>
+    //用户注册接口
+    function register() {
+        $.ajax({
+            type: "POST",
+            url: "http://" + ip + ":" + port + "/" + app + "/user.do",
+            data: {
+                method: 'register',
+                phone: $(".name").val(),
+                pass: $(".pwd").val(),
+                phoneCode: $(".information").val()
+            },
+            dataType: "json",
+            success: function (dataJSON) {
+                if (dataJSON.statusCode == 200) {
+                    var dataJSONs = dataJSON.data;
+                    if (dataJSONs.result == 1) {
+                        alert(dataJSON.message);
+                    } else {
+                        alert("请求失败，原因是：" + dataJSONs.result);
+                    }
+                }
+            }
+        });
+        window.location.href = 'login.html';
+    }
+    //短信接口
+    function getMessage() {
+        $.ajax({
+            type: "POST",
+            url: "http://" + ip + ":" + port + "/" + app + "/user.do?method=sendSMS",
+            data: {
+                method: 'sendSMS',
+                phone: $(".name").val()
+            },
+            dataType: "json",
+            success: function (dataJSON) {
+                if (dataJSON.statusCode == 200) {
+                    alert(dataJSON.message);
+                } else {
+                    alert("请求失败啦！！");
+                }
+            },
+            error: function (dataJSON) {
+            }
+        });
+    }
+    //倒计时
+    function setTimer() {
+        var time = 60;
+        var timers = setInterval(function () {
+            time--;
+            if (time <= 0) {
+                time = 0;
+                console.log(time);
+                $('.code').eq(0)[0].b = false;
+                $('.code').val('获取验证码');
+                clearInterval(timers);
+                return false;
+            }
+            $('.code').val(time + "秒后重新获取");
+        }, 1000);
+    }
+
+    //错误信息显示
+    function errMsg(html) {
+        $('.error').remove();
+        var str = '<div class="error">**' + html + '</div>';
+        return str;
+    }
+
+</script>
+
+</html>
